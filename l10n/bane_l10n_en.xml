@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <contributors>Florian</contributors>
+
+    <texts>
+        <!-- Inputs -->
+        <text name="input_uiBaNe_openMenu" text="BaNe hotkey"/>
+
+        <!-- General -->
+        <text name="uiBaNe_thisText" text="this text"/>
+
+        <!-- Tabbed Menus -->
+		<text name="uiBaNe_savebutton" text="Save settings"/>
+		<text name="uiBaNe_backbutton" text="Back"/>
+		<text name="uiBaNe_cancelbutton" text="Cancel"/>
+
+        <!-- Main XML -->
+        <text name="uiBaNe_mainHeader" text="BaNe - General"/>
+
+        <!-- Helper XML -->
+		<text name="uiBaNe_helperHeader" text="BaNe - Wage Settings"/>
+		<text name="uiBaNe_helperAbsolute" text="Absolute Wage"/>
+		<text name="uiBaNe_tt_helperAbsolute" text="The accounted wage is a static value per hour that's defined below."/>
+		<text name="uiBaNe_helperWageAbsolute" text="Wage per Hour"/>
+		<text name="uiBaNe_tt_helperWageAbsolute" text="Paid wage per hour."/>
+		<text name="uiBaNe_helperPercentile" text="Percentile Wage"/>
+		<text name="uiBaNe_tt_helperPercentile" text="The accounted wage is a percentile value of the game's default value."/>
+		<text name="uiBaNe_helperWagePercentile" text="Wage in %"/>
+		<text name="uiBaNe_tt_helperWagePercentile" text="Paid wage per hour in percent of default value."/>
+
+        <!-- FieldPrices XML -->
+        <text name="uiBaNe_fieldPricesHeader" text="BaNe - Field Prices"/>
+
+        <!-- ShopPrices XML -->
+        <text name="uiBaNe_shopPricesHeader" text="BaNe - Shop Prices"/>  
+    </texts>
+</l10n>

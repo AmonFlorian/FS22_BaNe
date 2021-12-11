@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <contributors>Florian</contributors>
+
+    <texts>
+        <!-- Inputs -->
+        <text name="input_uiBaNe_openMenu" text="BaNe Taste"/>
+
+        <!-- General -->
+        <text name="uiBaNe_thisText" text="dieser Text"/>
+
+        <!-- Tabbed Menus -->
+		<text name="uiBaNe_savebutton" text="Einst. speichern"/>
+		<text name="uiBaNe_backbutton" text="Zurück"/>
+		<text name="uiBaNe_cancelbutton" text="Abbrechen"/>
+
+        <!-- Main XML -->
+        <text name="uiBaNe_mainHeader" text="BaNe - Allgemein"/>
+
+        <!-- Helper XML -->
+        <text name="uiBaNe_helperHeader" text="BaNe - Lohneinstellungen"/>
+		<text name="uiBaNe_helperAbsolute" text="absoluter Arbeitslohn"/>
+		<text name="uiBaNe_tt_helperAbsolute" text="Der Arbeitslohn ist ein eingesteller Festwert, der pro Stunde berechnet wird."/>
+		<text name="uiBaNe_helperWageAbsolute" text="Arbeitslohn pro Stunde"/>
+		<text name="uiBaNe_tt_helperWageAbsolute" text="Der gezahlte Arbeitslohn pro Stunde."/>
+		<text name="uiBaNe_helperPercentile" text="prozentualer Arbeitslohn"/>
+		<text name="uiBaNe_tt_helperPercentile" text="Der Arbeitslohn ist ein eingestellter prozentualer Anteil vom Standardwert."/>
+		<text name="uiBaNe_helperWagePercentile" text="Arbeitslohn in %"/>
+		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in % vom Originalwert."/>
+
+        <!-- FieldPrices XML -->
+        <text name="uiBaNe_fieldPricesHeader" text="BaNe - Feldpreise"/>
+
+        <!-- ShopPrices XML -->
+        <text name="uiBaNe_shopPricesHeader" text="BaNe - Händlerpreise"/>  
+    </texts>
+</l10n>

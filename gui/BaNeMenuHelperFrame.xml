@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI name="baneMenuHelper">
+    <GuiElement type="empty" profile="uiInGameMenuFrame">
+        <!-- Static page header -->
+        <GuiElement type="empty" profile="ingameMenuFrameHeaderPanel">
+            <GuiElement type="bitmap" profile="ingameMenuGeneralSettingsHeaderIcon" />
+            <GuiElement type="text" baneTextID="uiBaNe_helperHeader" profile="ingameMenuFrameHeaderText" text="Helper Settings"/>
+        </GuiElement>
+
+        <!-- Layouted settings box -->
+        <GuiElement type="empty" profile="ingameMenuSettingsBox" id="uiBaNe_helperSettingsContainer">
+            <GuiElement type="bitmap" profile="topScrollClipper" name="topClipper" />
+            <GuiElement type="bitmap" profile="bottomScrollClipper" name="bottomClipper" />
+
+            <GuiElement type="scrollingLayout" profile="ingameMenuSettingsLayout" id="boxLayout" topClipperElementName="topClipper" bottomClipperElementName="bottomClipper">
+                <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickHelperAbsolute" id="checkHelperAbsolute">
+                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_helperAbsolute" profile="multiTextOptionSettingsTitle" text="helperAbsolute"/>
+                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_tt_helperAbsolute" profile="multiTextOptionSettingsTooltip" text="tt_helperAbsolute" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textWageAbsolute" onEnterPressed="onEnterPressedWageValueAbs" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperWageAbsolute" profile="multiTextOptionSettingsTitle" text="helperWageAbsolute"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperWageAbsolute" profile="multiTextOptionSettingsTooltip" text="tt_helperWageAbsolute" />
+                </GuiElement>
+				<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickHelperPercentile" id="checkHelperPercentile">
+                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_helperPercentile" profile="multiTextOptionSettingsTitle" text="helperPercentile"/>
+                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_tt_helperPercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperPercentile" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textWagePercentile" onEnterPressed="onEnterPressedWageValuePer" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperWagePercentile" profile="multiTextOptionSettingsTitle" text="helperWagePercentile"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperWagePercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperWagePercentile" />
+                </GuiElement>
+<!--                 <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickCheckbox" id="checkHelpIcons">
+                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
+                    <GuiElement type="text"   profile="multiTextOptionSettingsTitle" text="$l10n_setting_helpIconsOnMap"/>
+                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+                    <GuiElement type="text"   profile="multiTextOptionSettingsTooltip" text="$l10n_toolTip_helpIcons" />
+                </GuiElement> -->                
+            </GuiElement>
+        </GuiElement>
+    </GuiElement>
+</GUI>

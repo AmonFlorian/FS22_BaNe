@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="61">
+    <author>Florian T. aka kwa:m</author>    
+	<version>0.5.0a</version>
+	<title>
+        <de>BaNe</de>
+        <en>BaNe</en>    
+	</title>
+    <description>
+        <de>
+			<![CDATA[Erlaubt Änderungen der Wirtschaftsparameter der Umgebung und des Betriebs]]>
+		</de>
+		<en>
+			<![CDATA[Allows changing economic parameters of business and environment]]>
+		</en>    
+	</description>
+	<l10n filenamePrefix="l10n/bane_l10n"/>
+    <multiplayer supported="false"/>
+    <iconFilename>store.dds</iconFilename>
+	<inputBinding>
+		<actionBinding action="uiBaNe_openMenu">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lshift KEY_o"/>
+		</actionBinding>
+    </inputBinding>		
+	<actions>
+        <action name="uiBaNe_openMenu" />
+	</actions>
+	<extraSourceFiles>
+		<sourceFile filename="BaNe_main.lua" />
+    </extraSourceFiles>
+</modDesc>
