@@ -48,8 +48,8 @@ end
 function BaNe:loadMap()
 	source(Utils.getFilename("scripts/BaNe_helper.lua", self.mdir))
 	source(Utils.getFilename("scripts/BaNe_luautils.lua", self.mdir))
-	helper = g_BaNe.settings.helper
-	print("ooo BaNe debugging is "..tostring(self.debug).." ooo")
+	local helper = g_BaNe.settings.helper
+	print("ooo BaNe debugging enabled? ooo "..tostring(self.debug).." ooo")
 	if self.debug then
 		print("ooo BaNe Debug ... BaNe:loadMap ++ isClient="..tostring(g_currentMission:getIsClient()).." ,isServer="..tostring(g_currentMission:getIsServer()).." ,isMasterUser="..tostring(g_currentMission.isMasterUser).." ,isMultiplayer="..tostring(g_currentMission.missionDynamicInfo.isMultiplayer).." mname="..tostring(self.mname).." ooo")
 	end
@@ -66,14 +66,15 @@ function BaNe:loadMap()
 	if g_currentMission:getIsServer() then
 		if fileExists(sgFolderPath .. '/careerSavegame.xml') then
 			if fileExists(sgFolderPath .. '/BaNe.xml') then
-				print("ooo loading BaNe v".. self.version .. " Copyright (c) [kwa:m] ooo loading savedata ooo")
+				
 				local key = "BaNe"
 				local xmlFile = loadXMLFile("BaNe", sgFolderPath .. "/BaNe.xml", key)
 				if xmlFile ~= nil then
 					-- saveVersion					
 					local sgXmlVersion = Utils.getNoNil(getXMLString(xmlFile, key.."#version"), "0.0.0")
-					
+						print("ooo loading BaNe v".. self.version .. " ooo loading savedata ooo")
 					if tostring(sgXmlVersion) == tostring(self.version) then
+						
 						-- wagePerHour
 						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#wageType"), g_BaNe.settings.helper.wageType)
 						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wageAbsolute"), g_BaNe.settings.helper.wageAbsolute)
@@ -93,18 +94,16 @@ function BaNe:loadMap()
 						helper.factorB["to_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_tth"), g_BaNe.settings.helper.factorB["to_hours"])
 						helper.factorB["to_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm"), g_BaNe.settings.helper.factorB["to_minutes"])
 					else
-						if self.debug then
-							print("ooo saved settings are BaNe v".. sgXmlVersion .. " - using defaults for mod version v"..tostring(self.version).." ooo")
-						end
+						print("ooo found settings are for BaNe v".. sgXmlVersion .. " - using defaults for used version v"..tostring(self.version).." ooo")						
 					end
 				end;
 				delete(xmlFile)
 			else
 
-				print("ooo loading BaNe v"..tostring(self.version).. " - no savedata found ooo")
+				print("ooo loading BaNe v"..tostring(self.version).. " - no saved data found ooo")
 			end;		
 		else
-			print("ooo loading BaNe v"..tostring(self.version).." - no savedata found ooo")
+			print("ooo loading BaNe v"..tostring(self.version).." - no saved data found ooo")
 		end;	
 	end;
 	self.settings.helper = helper

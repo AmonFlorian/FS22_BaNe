@@ -26,7 +26,7 @@
 		<text name="uiBaNe_helperPercentile" text="prozentualer Arbeitslohn"/>
 		<text name="uiBaNe_tt_helperPercentile" text="Der Arbeitslohn ist ein eingestellter prozentualer Anteil vom Standardwert."/>
 		<text name="uiBaNe_helperWagePercentile" text="Arbeitslohn in Prozent."/>
-		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in Prozent vom Originalwert."/>
+		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in Prozent vom Originalwert. (!FORMAT: ohne %-Zeichen!)"/>
 		
 		<text name="uiBaNe_helperOTFactA" text="Faktor für Arbeitszeit (A)"/>
 		<text name="uiBaNe_helperFactAen" text="Aktivieren"/>

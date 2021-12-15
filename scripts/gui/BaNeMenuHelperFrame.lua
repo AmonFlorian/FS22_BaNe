@@ -241,12 +241,16 @@ end
 
 function BaNeMenuHelperFrame:onEnterPressedWageValuePer()
 	local factor = self:factorizePercent(self.textWagePercentile.text,0)
+	local valid = validateString(factor,"%d+%%")
+	if valid then
+		factor = factor:gsub("%%","")
+	end
 	if tonumber(factor) ~= self.helper.wagePercentile and tonumber(factor) ~= nil then
 		factor = math.round(tonumber(factor),0.1)
 		self.helper.wagePercentile = factor
 		self.textWagePercentile:setText(self:factorizePercent(self.helper.wagePercentile,1))
 		if g_BaNe.debug then
-			print("ooo BaNeMenuHelperFrame:onEnterPressedWageValuePer, new value ="..tostring(self.helper.wagePercentile).." ooo")
+			print("ooo BaNeMenuHelperFrame:onEnterPressedWageValuePer, new wage value ="..tostring(self.helper.wagePercentile).." ooo")
 		end
 	else
 		self.textWagePercentile:setText(self:factorizePercent(self.helper.wagePercentile,1))
@@ -260,6 +264,23 @@ function BaNeMenuHelperFrame:onClickHelperFactA(state)
 	self.helper.factorA["enable"] = self.checkHelperFactA:getIsChecked()
 	if g_BaNe.debug then
 		print("ooo BaNeMenuHelperFrame:onClickHelperFactA, self.helper.factorA[\"enable\"] ="..tostring(self.helper.factorA["enable"]).." ooo")
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactAValue()
+	local newVal = self.textFactAval.text
+	if newVal ~= self.helper.factorA["factor"] and tonumber(newVal) ~= nil then
+			newVal = math.round(tonumber(newVal),0.1)
+			self.helper.factorA["factor"] = newVal
+			self.textFactAval:setText(string.format("%.1f",self.helper.factorA["factor"]))
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactAValue, new factor value ="..tostring(self.helper.factorA["factor"]).." ooo")
+			end
+	else
+		self.textFactAval:setText(string.format("%.1f",self.helper.factorA["factor"]))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactAValue, old factor value ="..tostring(self.helper.factorA["factor"]).." vs new wage ="..tostring(newVal).." ooo")
+		end
 	end
 end
 
@@ -313,6 +334,23 @@ function BaNeMenuHelperFrame:onClickHelperFactB(state)
 	self.helper.factorB["enable"] = self.checkHelperFactB:getIsChecked()
 	if g_BaNe.debug then
 		print("ooo BaNeMenuHelperFrame:onClickHelperFactB, self.helper.factorB[\"enable\"] ="..tostring(self.helper.factorB["enable"]).." ooo")
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactBValue()
+	local newVal = self.textFactBval.text
+	if newVal ~= self.helper.factorB["factor"] and tonumber(newVal) ~= nil then
+			newVal = math.round(tonumber(newVal),0.1)
+			self.helper.factorB["factor"] = newVal
+			self.textFactBval:setText(string.format("%.1f",self.helper.factorB["factor"]))
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactBValue, new factor value ="..tostring(self.helper.factorB["factor"]).." ooo")
+			end
+	else
+		self.textFactBval:setText(string.format("%.1f",self.helper.factorB["factor"]))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactBValue, old factor value ="..tostring(self.helper.factorB["factor"]).." vs new wage ="..tostring(newVal).." ooo")
+		end
 	end
 end
 

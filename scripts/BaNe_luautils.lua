@@ -26,16 +26,50 @@ end;
 
 function validateTimeString(str, pat)
 	if str ~= nil then
-		if str:len() == 5 then
+		if str:len() >= 4 and str:len() <= 5 then
 			if pat == nil then
-				pat = "%d%d:%d%d"
+				pat = "^%d+:%d%d$"
 			end
 			if string.find(str,pat) ~= nil then
-				return true 
+				local tstr, thr, tmin = {}, nil, nil
+				tstr = str:split(":")
+				if #tstr >= 2 then
+					thr, tmin = tonumber(tstr[1]), tonumber(tstr[2])
+					if thr ~= nil and tmin ~= nil then
+						if thr >= 0 and thr <= 23 and tmin >= 0 and tmin <= 59 then
+							return true 
+						else
+							return false
+						end
+					else
+						return false
+					end
+				else
+					return false
+				end
 			else
 				return false
 			end
+		else
+			return false
 		end
+	else
+		return false
+	end
+end
+
+function validateString(str, pat)
+	if str ~= nil then
+		
+		if pat == nil then
+			pat = "(%s+)"
+		end
+		if string.find(str,pat) ~= nil then
+			return true 
+		else
+			return false
+		end
+		
 	else
 		return false
 	end
