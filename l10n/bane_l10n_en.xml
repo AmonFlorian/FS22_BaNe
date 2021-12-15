@@ -7,7 +7,7 @@
         <text name="input_uiBaNe_openMenu" text="BaNe hotkey"/>
 
         <!-- General -->
-        <text name="uiBaNe_thisText" text="this text"/>
+        <text name="uiBaNe_comingsoon" text="This area will get its contents in future updates."/>
 
         <!-- Tabbed Menus -->
 		<text name="uiBaNe_savebutton" text="Save settings"/>
@@ -25,9 +25,28 @@
 		<text name="uiBaNe_tt_helperWageAbsolute" text="Paid wage per hour."/>
 		<text name="uiBaNe_helperPercentile" text="Percentile Wage"/>
 		<text name="uiBaNe_tt_helperPercentile" text="The accounted wage is a percentile value of the game's default value."/>
-		<text name="uiBaNe_helperWagePercentile" text="Wage in %"/>
+		<text name="uiBaNe_helperWagePercentile" text="Wage in Percent"/>
 		<text name="uiBaNe_tt_helperWagePercentile" text="Paid wage per hour in percent of default value."/>
-
+		
+		<text name="uiBaNe_helperOTFactA" text="Factor for Working Hours (A)"/>
+		<text name="uiBaNe_helperFactAen" text="Enable"/>
+		<text name="uiBaNe_tt_helperFactAen" text="Enables the set parameters below."/>
+		<text name="uiBaNe_helperFactAval" text="Multiplier"/>
+		<text name="uiBaNe_tt_helperFactAval" text="Multiplies the wage during set time with this value."/>
+		<text name="uiBaNe_helperFactAfrom" text="Starting time"/>
+		<text name="uiBaNe_tt_helperFactAfrom" text="Set multiplier applies from this starting time. (!FORMAT: HH:MM!)"/>
+		<text name="uiBaNe_helperFactAto" text="Ending time"/>
+		<text name="uiBaNe_tt_helperFactAto" text="Set multiplier applies until this ending time. (!FORMAT: HH:MM!)"/>
+		
+		<text name="uiBaNe_helperOTFactB" text="Factor for Working Hours (B)"/>
+		<text name="uiBaNe_helperFactBen" text="Enable"/>
+		<text name="uiBaNe_tt_helperFactBen" text="Enables the set parameters below."/>
+		<text name="uiBaNe_helperFactBval" text="Multiplier"/>
+		<text name="uiBaNe_tt_helperFactBval" text="Multiplies the wage during set time with this value."/>
+		<text name="uiBaNe_helperFactBfrom" text="Starting time"/>
+		<text name="uiBaNe_tt_helperFactBfrom" text="Set multiplier applies from this starting time. (!FORMAT: HH:MM!)"/>
+		<text name="uiBaNe_helperFactBto" text="Ending time"/>
+		<text name="uiBaNe_tt_helperFactBto" text="Set multiplier applies until this ending time. (!FORMAT: HH:MM!)"/>
         <!-- FieldPrices XML -->
         <text name="uiBaNe_fieldPricesHeader" text="BaNe - Field Prices"/>
 

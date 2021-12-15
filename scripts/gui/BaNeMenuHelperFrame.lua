@@ -1,11 +1,13 @@
 -- Business administration & national economy (for FS22)
 -- helper frame file: BaNeMenuHelperFrame.lua
--- v0.5.0a
+-- v1.0.0b
 --
 -- @author [kwa:m]
--- @date 05.12.2021
+-- @date 15.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
+-- v0.6.0a - added customizable nighttime/overtime factors
 -- v0.5.0a - done GUI general layout, changed initialization process
 -- v0.1.0a - added first iteration of GUI
 -- v0.0.5a - added version in XML to overwrite values if changed defaults (TODO: GUI with possibility to warn that changes happened)
@@ -21,7 +23,15 @@ BaNeMenuHelperFrame.CONTROLS = {
 	"checkHelperAbsolute",
 	"textWageAbsolute",
 	"checkHelperPercentile",
-	"textWagePercentile"
+	"textWagePercentile",
+	"checkHelperFactA",
+	"textFactAval",
+	"textFactAfrom",
+	"textFactAto",
+	"checkHelperFactB",
+	"textFactBval",
+	"textFactBfrom",
+	"textFactBto"
 }
 
 function BaNeMenuHelperFrame.new()
@@ -57,6 +67,17 @@ function BaNeMenuHelperFrame:InitSettings(helper)
 			self.textWageAbsolute:setDisabled(true)
 			self.textWagePercentile:setDisabled(false)
 		end
+		self.checkHelperFactA:setIsChecked(self.helper.factorA["enable"])
+		self.textFactAval:setText(string.format("%.1f",self.helper.factorA["factor"]))		
+		self.textFactAfrom:setText(string.format("%02d:%02d",self.helper.factorA["from_hours"],self.helper.factorA["from_minutes"]))
+		self.textFactAto:setText(string.format("%02d:%02d",self.helper.factorA["to_hours"],self.helper.factorA["to_minutes"]))
+		self.checkHelperFactB:setIsChecked(self.helper.factorB["enable"])
+		self.textFactBval:setText(string.format("%.1f",self.helper.factorB["factor"]))
+		self.textFactBfrom:setText(string.format("%02d:%02d",self.helper.factorB["from_hours"],self.helper.factorB["from_minutes"]))
+		self.textFactBto:setText(string.format("%02d:%02d",self.helper.factorB["to_hours"],self.helper.factorB["to_minutes"]))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:InitSettings() called! ooo")
+		end
 	else
 		print("ooo BaNeMenuHelperFrame:InitSettings: helper is nil! ooo")
 	end
@@ -82,6 +103,39 @@ function BaNeMenuHelperFrame:factorizePercent(value, dir)
 			return nil
 		end
 	else
+		return nil
+	end
+end
+
+function BaNeMenuHelperFrame:convertTimeString(tstr)
+	local ttime = {}
+	local thr, tmin = nil, nil
+	if tstr ~= nil and type(tstr) == "string" then
+		if tstr:len() <= 5 and tstr:len() >= 4 then
+			ttime = tstr:split(":")
+			thr = ttime[1]
+			tmin = ttime[2]
+			if thr ~= nil and tmin ~= nil and tonumber(thr) >= 0 and tonumber(thr) <= 23 and tonumber(tmin) >= 0 and tonumber(tmin) <= 59 then
+				if g_BaNe.debug then
+					print ("ooo BaNeMenuHelperFrame:convertTimeString:"..tstr.." converted to "..thr.." - "..tmin.." ooo")
+				end
+				return thr, tmin				
+			else
+				if g_BaNe.debug then
+					print ("ooo BaNeMenuHelperFrame:convertTimeString:"..tstr.." not resolved correctly:"..tostring(thr).." - "..tostring(min).." ooo")
+				end
+				return nil
+			end
+		else
+			if g_BaNe.debug then
+				print ("ooo BaNeMenuHelperFrame:convertTimeString:"..tstr.." is too short:"..tstr:len())
+			end
+			return nil
+		end
+	else
+		if g_BaNe.debug then
+			print ("ooo BaNeMenuHelperFrame:convertTimeString:"..tstr.." is nil or no string ooo")
+		end
 		return nil
 	end
 end
@@ -200,4 +254,110 @@ function BaNeMenuHelperFrame:onEnterPressedWageValuePer()
 			print("ooo BaNeMenuHelperFrame:onEnterPressedWageValuePer, old factor value ="..tostring(self.helper.wagePercentile).." vs new factor ="..tostring(factor).." ooo")
 		end
 	end
+end
+
+function BaNeMenuHelperFrame:onClickHelperFactA(state)
+	self.helper.factorA["enable"] = self.checkHelperFactA:getIsChecked()
+	if g_BaNe.debug then
+		print("ooo BaNeMenuHelperFrame:onClickHelperFactA, self.helper.factorA[\"enable\"] ="..tostring(self.helper.factorA["enable"]).." ooo")
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactATimeFrom()
+	local valid = false
+	local timestr = tostring(self.textFactAfrom.text)
+	valid = validateTimeString(timestr)
+	if not valid then
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactATimeFrom - found no valid time! ooo")
+		end
+		self.textFactAfrom:setText(string.format("%02d:%02d",self.helper.factorA["from_hours"],self.helper.factorA["from_minutes"]))
+	elseif valid then
+		local timesplit = string.split(timestr,":")
+		local timehrs, timemin = tonumber(timesplit[1]), tonumber(timesplit[2])
+		if timehrs ~= nil and timemin ~= nil then
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactATimeFrom - found time: "..timehrs..":"..timemin.." ooo")
+			end
+			self.helper.factorA["from_hours"] = timehrs
+			self.helper.factorA["from_minutes"] = timemin
+			self.textFactAfrom:setText(string.format("%02d:%02d",self.helper.factorA["from_hours"],self.helper.factorA["from_minutes"]))
+		end
+	end	
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactATimeTo()
+	local valid = false
+	local timestr = tostring(self.textFactAto.text)
+	valid = validateTimeString(timestr)
+	if not valid then
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactATimeTo - found no valid time! ooo")
+		end
+		self.textFactAto:setText(string.format("%02d:%02d",self.helper.factorA["to_hours"],self.helper.factorA["to_minutes"]))
+	elseif valid then
+		local timesplit = string.split(timestr,":")
+		local timehrs, timemin = tonumber(timesplit[1]), tonumber(timesplit[2])
+		if timehrs ~= nil and timemin ~= nil then
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactATimeTo - found time: "..timehrs..":"..timemin.." ooo")
+			end
+			self.helper.factorA["to_hours"] = timehrs
+			self.helper.factorA["to_minutes"] = timemin
+			self.textFactAto:setText(string.format("%02d:%02d",self.helper.factorA["to_hours"],self.helper.factorA["to_minutes"]))
+		end
+	end	
+end
+
+function BaNeMenuHelperFrame:onClickHelperFactB(state)
+	self.helper.factorB["enable"] = self.checkHelperFactB:getIsChecked()
+	if g_BaNe.debug then
+		print("ooo BaNeMenuHelperFrame:onClickHelperFactB, self.helper.factorB[\"enable\"] ="..tostring(self.helper.factorB["enable"]).." ooo")
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactBTimeFrom()
+	local valid = false
+	local timestr = tostring(self.textFactBfrom.text)
+	valid = validateTimeString(timestr)
+	if not valid then
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactBTimeFrom - found no valid time! ooo")
+		end
+		self.textFactBfrom:setText(string.format("%02d:%02d",self.helper.factorB["from_hours"],self.helper.factorB["from_minutes"]))
+	elseif valid then
+		local timesplit = string.split(timestr,":")
+		local timehrs, timemin = tonumber(timesplit[1]), tonumber(timesplit[2])
+		if timehrs ~= nil and timemin ~= nil then
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactBTimeFrom - found time: "..timehrs..":"..timemin.." ooo")
+			end
+			self.helper.factorB["from_hours"] = timehrs
+			self.helper.factorB["from_minutes"] = timemin
+			self.textFactBfrom:setText(string.format("%02d:%02d",self.helper.factorB["from_hours"],self.helper.factorB["from_minutes"]))
+		end
+	end	
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFactBTimeTo()
+	local valid = false
+	local timestr = tostring(self.textFactBto.text)
+	valid = validateTimeString(timestr)
+	if not valid then
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFactBTimeTo - found no valid time! ooo")
+		end
+		self.textFactBto:setText(string.format("%02d:%02d",self.helper.factorB["to_hours"],self.helper.factorB["to_minutes"]))
+	elseif valid then
+		local timesplit = string.split(timestr,":")
+		local timehrs, timemin = tonumber(timesplit[1]), tonumber(timesplit[2])
+		if timehrs ~= nil and timemin ~= nil then
+			if g_BaNe.debug then
+				print("ooo BaNeMenuHelperFrame:onEnterPressedFactBTimeTo - found time: "..timehrs..":"..timemin.." ooo")
+			end
+			self.helper.factorB["to_hours"] = timehrs
+			self.helper.factorB["to_minutes"] = timemin
+			self.textFactBto:setText(string.format("%02d:%02d",self.helper.factorB["to_hours"],self.helper.factorB["to_minutes"]))
+		end
+	end	
 end

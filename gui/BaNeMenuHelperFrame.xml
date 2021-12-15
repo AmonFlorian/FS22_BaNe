@@ -39,6 +39,59 @@
                     <GuiElement type="text" baneTextID="uiBaNe_helperWagePercentile" profile="multiTextOptionSettingsTitle" text="helperWagePercentile"/>
                     <GuiElement type="text" baneTextID="uiBaNe_tt_helperWagePercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperWagePercentile" />
                 </GuiElement>
+				
+				<GuiElement type="text" profile="settingsMenuSubtitle" baneTextID="uiBaNe_helperOTFactA" text="helperOTFactA" />
+				
+				<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickHelperFactA" id="checkHelperFactA">
+                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_helperFactAen" profile="multiTextOptionSettingsTitle" text="helperFactAen"/>
+                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_tt_helperFactAen" profile="multiTextOptionSettingsTooltip" text="tt_helperFactAen"/>
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactAval" onEnterPressed="onEnterPressedFactAValue" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactAval" profile="multiTextOptionSettingsTitle" text="helperFactAval"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactAval" profile="multiTextOptionSettingsTooltip" text="tt_helperFactAval" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactAfrom" onEnterPressed="onEnterPressedFactATimeFrom" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactAfrom" profile="multiTextOptionSettingsTitle" text="helperFactAfrom"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactAfrom" profile="multiTextOptionSettingsTooltip" text="tt_helperFactAfrom" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactAto" onEnterPressed="onEnterPressedFactATimeTo" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactAto" profile="multiTextOptionSettingsTitle" text="helperFactAto"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactAto" profile="multiTextOptionSettingsTooltip" text="tt_helperFactAto" />
+                </GuiElement>
+				
+				<GuiElement type="text" profile="settingsMenuSubtitle" baneTextID="uiBaNe_helperOTFactB" text="helperOTFactB" />
+				
+				<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickHelperFactB" id="checkHelperFactB">
+                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_helperFactBen" profile="multiTextOptionSettingsTitle" text="helperFactBen"/>
+                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+                    <GuiElement type="text"   baneTextID="uiBaNe_tt_helperFactBen" profile="multiTextOptionSettingsTooltip" text="tt_helperFactBen"/>
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactBval" onEnterPressed="onEnterPressedFactBValue" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactBval" profile="multiTextOptionSettingsTitle" text="helperFactBval"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactBval" profile="multiTextOptionSettingsTooltip" text="tt_helperFactBval" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactBfrom" onEnterPressed="onEnterPressedFactBTimeFrom" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactBfrom" profile="multiTextOptionSettingsTitle" text="helperFactBfrom"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactBfrom" profile="multiTextOptionSettingsTooltip" text="tt_helperFactBfrom" />
+                </GuiElement>
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactBto" onEnterPressed="onEnterPressedFactBTimeTo" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFactBto" profile="multiTextOptionSettingsTitle" text="helperFactBto"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactBto" profile="multiTextOptionSettingsTooltip" text="tt_helperFactBto" />
+                </GuiElement>
+
 <!--                 <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickCheckbox" id="checkHelpIcons">
                     <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
                     <GuiElement type="button" profile="multiTextOptionSettingsRight"/>

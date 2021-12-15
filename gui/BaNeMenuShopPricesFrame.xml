@@ -13,23 +13,10 @@
             <GuiElement type="bitmap" profile="bottomScrollClipper" name="bottomClipper" />
 
             <GuiElement type="scrollingLayout" profile="ingameMenuSettingsLayout" id="boxLayout" topClipperElementName="topClipper" bottomClipperElementName="bottomClipper">
-                <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickCheckbox" id="checkAutoHelp">
-                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
-                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
-                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTitle" text="$l10n_setting_helpWindow"/>
-                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTooltip" text="$l10n_toolTip_autoHelp" />
-                </GuiElement>
-<!--                 <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickCheckbox" id="checkHelpIcons">
-                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
-                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
-                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTitle" text="$l10n_setting_helpIconsOnMap"/>
-                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTooltip" text="$l10n_toolTip_helpIcons" />
-                </GuiElement> -->                
-            </GuiElement>
+                
+			<GuiElement type="text" profile="settingsMenuSubtitle" baneTextID="uiBaNe_comingsoon" text="coming soon" />				
+            
+			</GuiElement>
         </GuiElement>
     </GuiElement>
 </GUI>

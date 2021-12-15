@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="61">
     <author>Florian T. aka kwa:m</author>    
-	<version>0.5.0a</version>
+	<version>1.0.0b</version>
 	<title>
         <de>BaNe</de>
         <en>BaNe</en>    
@@ -26,6 +26,6 @@
         <action name="uiBaNe_openMenu" />
 	</actions>
 	<extraSourceFiles>
-		<sourceFile filename="BaNe_main.lua" />
+		<sourceFile filename="BaNe_main.lua" />		
     </extraSourceFiles>
 </modDesc>

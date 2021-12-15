@@ -1,11 +1,13 @@
 -- Business administration & national economy (for FS22)
 -- settings menu file: BaNeMenu.lua
--- v0.5.0a
+-- v1.0.0b
 --
 -- @author [kwa:m]
--- @date 05.12.2021
+-- @date 15.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
+-- v0.6.0a - added customizable nighttime/overtime factors
 -- v0.5.0a - done GUI general layout, changed initialization process
 -- v0.1.0a - added first iteration of GUI
 -- v0.0.5a - added version in XML to overwrite values if changed defaults (TODO: GUI with possibility to warn that changes happened)
@@ -117,25 +119,25 @@ function BaNeMenu:setupMenuButtonInfo()
 		text = self.l10n:getText(BaNeMenu.L10N_SYMBOL.BUTTON_SAVE_SETTINGS),
 		callback = onButtonSaveSettingsFunction
 	}
-	self.quitButtonInfo = {
-		showWhenPaused = true,
-		inputAction = InputAction.MENU_CANCEL,
-		text = self.l10n:getText(BaNeMenu.L10N_SYMBOL.BUTTON_CANCEL),
-		callback = onButtonQuitFunction
-	}
+--	self.quitButtonInfo = {
+--		showWhenPaused = true,
+--		inputAction = InputAction.MENU_CANCEL,
+--		text = self.l10n:getText(BaNeMenu.L10N_SYMBOL.BUTTON_CANCEL),
+--		callback = onButtonQuitFunction
+--	}
 
 	self.defaultMenuButtonInfo = {
 		self.backButtonInfo,
 		self.saveButtonInfo,
-		self.quitButtonInfo
+--		self.quitButtonInfo
 	}
 
 	self.defaultMenuButtonInfoByActions[InputAction.MENU_BACK] = self.defaultMenuButtonInfo[1]
 	self.defaultMenuButtonInfoByActions[InputAction.MENU_ACTIVATE] = self.defaultMenuButtonInfo[2]
-	self.defaultMenuButtonInfoByActions[InputAction.MENU_CANCEL] = self.defaultMenuButtonInfo[3]
+--	self.defaultMenuButtonInfoByActions[InputAction.MENU_CANCEL] = self.defaultMenuButtonInfo[3]
 	self.defaultButtonActionCallbacks = {
 		[InputAction.MENU_BACK] = onButtonBackFunction,
-		[InputAction.MENU_CANCEL] = onButtonQuitFunction,
+--		[InputAction.MENU_CANCEL] = onButtonQuitFunction,
 		[InputAction.MENU_ACTIVATE] = onButtonSaveSettingsFunction
 	}
 end
@@ -178,16 +180,15 @@ function BaNeMenu:onClose(element)
 	self.mouseDown = false
 	self.alreadyClosed = true
 
-	BaNe:saveSettings()
 end
 
 function BaNeMenu:onButtonSaveSettings()
 	BaNe:saveSettings()
 end
 
-function BaNeMenu:onButtonQuit()
-	return true
-end
+--function BaNeMenu:onButtonQuit()
+--	return true
+--end
 
 function BaNeMenu:onButtonBack()
 	if self.currentPage == self.pageBaNeMain then

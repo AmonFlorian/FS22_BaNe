@@ -1,11 +1,13 @@
 -- Business administration & national economy (for FS22)
 -- main faile: BaNe_main.lua
-local version = "0.5.0a"
+local version = "1.0.0b"
 --
 -- @author [kwa:m]
--- @date 05.12.2021
+-- @date 15.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
+-- v0.6.0a - added customizable nighttime/overtime factors
 -- v0.5.0a - done GUI general layout, changed initialization process
 -- v0.1.0a - added first iteration of GUI
 -- v0.0.5a - added version in XML to overwrite values if changed defaults (TODO: GUI with possibility to warn that changes happened)
@@ -18,6 +20,7 @@ local modName = g_currentModName
 
 BaNe = {}
 local BaNe_mt = Class(BaNe)
+--
 
 function BaNe.prerequisitesPresent(specializations)
     return true
@@ -27,7 +30,7 @@ function BaNe.new(i18n)
 	self={}
 	setmetatable(self, BaNe_mt)
 	self.version = version
-	self.debug = true
+	self.debug = false
 	self.mdir = modDir
 	self.mname = modName
 	-- Initialize standard values
@@ -43,8 +46,8 @@ function BaNe.new(i18n)
 end
 
 function BaNe:loadMap()
-	source(Utils.getFilename("scripts/BaNe_luautils.lua", self.mdir))
 	source(Utils.getFilename("scripts/BaNe_helper.lua", self.mdir))
+	source(Utils.getFilename("scripts/BaNe_luautils.lua", self.mdir))
 	helper = g_BaNe.settings.helper
 	print("ooo BaNe debugging is "..tostring(self.debug).." ooo")
 	if self.debug then
@@ -72,15 +75,23 @@ function BaNe:loadMap()
 					
 					if tostring(sgXmlVersion) == tostring(self.version) then
 						-- wagePerHour
-						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#wageType"), 1)
-						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wageAbsolute"), 800.0)
-						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wagePercentile"), 100.0)						
-						helper.wagePerHour = Utils.getNoNil(BaNe:getWagePerHour(helper.wageType,helper.wageAbsolute,helper.wagePercentile), 800.0)
+						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#wageType"), g_BaNe.settings.helper.wageType)
+						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wageAbsolute"), g_BaNe.settings.helper.wageAbsolute)
+						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wagePercentile"), g_BaNe.settings.helper.wagePercentile)						
 						-- nighttime factors
-						helper.nightFactor_A = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_A"), 1.5)
-						helper.nightFactor_A = math.round(helper.nightFactor_A, 0.1)
-						helper.nightFactor_B = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_B"), 2.5)
-						helper.nightFactor_B = math.round(helper.nightFactor_B, 0.1)
+						helper.factorA["enable"] = Utils.getNoNil(getXMLBool(xmlFile, key.."#helper_enableFactor_A"), g_BaNe.settings.helper.factorA["enable"])
+						helper.factorA["factor"] = math.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_A"), g_BaNe.settings.helper.factorA["factor"]), 0.1)
+						helper.factorA["from_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_A_fth"), g_BaNe.settings.helper.factorA["from_hours"])
+						helper.factorA["from_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_A_ftm"), g_BaNe.settings.helper.factorA["from_minutes"])
+						helper.factorA["to_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_A_tth"), g_BaNe.settings.helper.factorA["to_hours"])
+						helper.factorA["to_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_A_ttm"), g_BaNe.settings.helper.factorA["to_minutes"])
+						
+						helper.factorB["enable"] = Utils.getNoNil(getXMLBool(xmlFile, key.."#helper_enableFactor_B"), g_BaNe.settings.helper.factorB["enable"])
+						helper.factorB["factor"] = math.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_B"), g_BaNe.settings.helper.factorB["factor"]))
+						helper.factorB["from_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_fth"), g_BaNe.settings.helper.factorB["from_hours"])
+						helper.factorB["from_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_ftm"), g_BaNe.settings.helper.factorB["from_minutes"])
+						helper.factorB["to_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_tth"), g_BaNe.settings.helper.factorB["to_hours"])
+						helper.factorB["to_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm"), g_BaNe.settings.helper.factorB["to_minutes"])
 					else
 						if self.debug then
 							print("ooo saved settings are BaNe v".. sgXmlVersion .. " - using defaults for mod version v"..tostring(self.version).." ooo")
@@ -118,17 +129,17 @@ function BaNe:LoadMissionDone(mission)
 	-- okay...this is a somewhat tricky part (shoutouts to the VCA guys for that clever idea to l10n those textes by adding an id-key, god damn)
 	
 	if g_client ~= nil then --g_currentMission:getIsClient()
-	
+
 		local function loadTextElement( self, xmlFile, key )		
 			local id = getXMLString(xmlFile, key .. "#baneTextID")
 			if id ~= nil and g_i18n:hasText(id) ~= nil and type(self.setText) == "function" then 
-				self:setText(g_i18n:getText(id))			
+				self:setText(g_i18n:getText(id))
 			end 
 		end
 		local function loadGuiElement( self, xmlFile, key )		
 			local id = getXMLString(xmlFile, key .. "#baneTextID")
 			if id ~= nil and g_i18n:hasText(id) ~= nil and type(self.setText) == "function" then 
-				self:setText(g_i18n:getText(id))			
+				self:setText(g_i18n:getText(id))
 			end 
 		end
 		
@@ -243,10 +254,19 @@ function BaNe:saveSettings()
 	setXMLInt(xmlFile, key.."#wageType", g_BaNe.settings.helper.wageType)
 	setXMLFloat(xmlFile, key.."#wageAbsolute", g_BaNe.settings.helper.wageAbsolute)
 	setXMLFloat(xmlFile, key.."#wagePercentile", g_BaNe.settings.helper.wagePercentile)
-	setXMLFloat(xmlFile, key.."#wagePerHour", g_BaNe.settings.helper.wagePerHour)
 	-- nighttime factors
-	setXMLFloat(xmlFile, key.."#helper_nightFactor_A", g_BaNe.settings.helper.nightFactor_A)
-	setXMLFloat(xmlFile, key.."#helper_nightFactor_B", g_BaNe.settings.helper.nightFactor_B)
+	setXMLBool(xmlFile, key.."#helper_enableFactor_A", g_BaNe.settings.helper.factorA["enable"])
+	setXMLFloat(xmlFile, key.."#helper_nightFactor_A", g_BaNe.settings.helper.factorA["factor"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_A_fth", g_BaNe.settings.helper.factorA["from_hours"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_A_ftm", g_BaNe.settings.helper.factorA["from_minutes"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_A_tth", g_BaNe.settings.helper.factorA["to_hours"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_A_ttm", g_BaNe.settings.helper.factorA["to_minutes"])
+	setXMLBool(xmlFile, key.."#helper_enableFactor_B", g_BaNe.settings.helper.factorB["enable"])
+	setXMLFloat(xmlFile, key.."#helper_nightFactor_B", g_BaNe.settings.helper.factorB["factor"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_B_fth", g_BaNe.settings.helper.factorB["from_hours"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ftm", g_BaNe.settings.helper.factorB["from_minutes"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_B_tth", g_BaNe.settings.helper.factorB["to_hours"])
+	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm", g_BaNe.settings.helper.factorB["to_minutes"])
 
 	saveXMLFile(xmlFile)
 	delete(xmlFile)
@@ -260,9 +280,21 @@ function BaNe:setDefaults()
 	helper.wageType = 1 -- 1=absolute, 2=percentile
 	helper.wageAbsolute = 800.0 -- 800.0 seems to be the smallest reasonable number (= 0.00022 per ms)
 	helper.wagePercentile = 1.0 -- 1.0 = 100%
-	helper.wagePerHour = BaNe:getWagePerHour(helper.wageType, helper.wageAbsolute, helper.wagePercentile)
-	helper.nightFactor_A = 1.5 -- 150% for a good start
-	helper.nightFactor_B = 2.5 -- 250% for a good start
+	--helper.wagePerHour = BaNe:getWagePerHour(helper.wageType, helper.wageAbsolute, helper.wagePercentile)
+	helper.factorA = {}
+	helper.factorB = {}
+	helper.factorA["enable"] = true
+	helper.factorA["factor"] = 1.5 -- 150% for a good start
+	helper.factorA["from_hours"] = 20
+	helper.factorA["from_minutes"] = 0
+	helper.factorA["to_hours"] = 22
+	helper.factorA["to_minutes"] = 0
+	helper.factorB["enable"] = true
+	helper.factorB["factor"] = 2.5 -- 250% for a good start
+	helper.factorB["from_hours"] = 22
+	helper.factorB["from_minutes"] = 0
+	helper.factorB["to_hours"] = 6
+	helper.factorB["to_minutes"] = 0
 	local fields = {}
 	local shops = {}		
 	settings.general = general

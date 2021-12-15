@@ -7,7 +7,7 @@
         <text name="input_uiBaNe_openMenu" text="BaNe Taste"/>
 
         <!-- General -->
-        <text name="uiBaNe_thisText" text="dieser Text"/>
+        <text name="uiBaNe_comingsoon" text="Dieser Bereich erhält in zukünftigen Updates seinen Inhalt."/>
 
         <!-- Tabbed Menus -->
 		<text name="uiBaNe_savebutton" text="Einst. speichern"/>
@@ -25,8 +25,28 @@
 		<text name="uiBaNe_tt_helperWageAbsolute" text="Der gezahlte Arbeitslohn pro Stunde."/>
 		<text name="uiBaNe_helperPercentile" text="prozentualer Arbeitslohn"/>
 		<text name="uiBaNe_tt_helperPercentile" text="Der Arbeitslohn ist ein eingestellter prozentualer Anteil vom Standardwert."/>
-		<text name="uiBaNe_helperWagePercentile" text="Arbeitslohn in %"/>
-		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in % vom Originalwert."/>
+		<text name="uiBaNe_helperWagePercentile" text="Arbeitslohn in Prozent."/>
+		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in Prozent vom Originalwert."/>
+		
+		<text name="uiBaNe_helperOTFactA" text="Faktor für Arbeitszeit (A)"/>
+		<text name="uiBaNe_helperFactAen" text="Aktivieren"/>
+		<text name="uiBaNe_tt_helperFactAen" text="Aktiviert die unten angegebenen Einstellungen."/>
+		<text name="uiBaNe_helperFactAval" text="Lohnfaktor"/>
+		<text name="uiBaNe_tt_helperFactAval" text="Multipliziert den Lohn während der eingestellten Zeit mit diesem Wert."/>
+		<text name="uiBaNe_helperFactAfrom" text="Start-Zeit"/>
+		<text name="uiBaNe_tt_helperFactAfrom" text="Der eingestellte Faktor gilt ab dieser Ingame-Uhrzeit. (!FORMAT: HH:MM!)" />
+		<text name="uiBaNe_helperFactAto" text="End-Zeit"/>
+		<text name="uiBaNe_tt_helperFactAto" text="Der eingestellte Faktor gilt bis zu dieser Ingame-Uhrzeit. (!FORMAT: HH:MM!)"/>
+		
+		<text name="uiBaNe_helperOTFactB" text="Faktor für Arbeitszeit (B)"/>
+		<text name="uiBaNe_helperFactBen" text="Aktivieren"/>
+		<text name="uiBaNe_tt_helperFactBen" text="Aktiviert die unten angegebenen Einstellungen."/>
+		<text name="uiBaNe_helperFactBval" text="Lohnfaktor"/>
+		<text name="uiBaNe_tt_helperFactBval" text="Multipliziert den Lohn während der eingestellten Zeit mit diesem Wert."/>
+		<text name="uiBaNe_helperFactBfrom" text="Start-Zeit"/>
+		<text name="uiBaNe_tt_helperFactBfrom" text="Der eingestellte Faktor gilt ab dieser Ingame-Uhrzeit. (!FORMAT: HH:MM!)"/>
+		<text name="uiBaNe_helperFactBto" text="End-Zeit"/>
+		<text name="uiBaNe_tt_helperFactBto" text="Der eingestellte Faktor gilt bis zu dieser Ingame-Uhrzeit. (!FORMAT: HH:MM!)"/>
 
         <!-- FieldPrices XML -->
         <text name="uiBaNe_fieldPricesHeader" text="BaNe - Feldpreise"/>
