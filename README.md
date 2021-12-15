@@ -18,6 +18,6 @@ TODOs:
 - maybe add the option to let different values fluctuate over time
 
 Features:
-- tabbed InGame menu (accessible with CTRL+O)
+- tabbed InGame menu (accessible with L_SHIFT+O)
 - helper AI costs configurable including two time-based factors (e.g. for nighttime work)
 - settings are saved in a separate xml-file in the savegame's folder
