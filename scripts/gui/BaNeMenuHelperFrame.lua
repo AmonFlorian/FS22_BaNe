@@ -24,6 +24,8 @@ BaNeMenuHelperFrame.CONTROLS = {
 	"textWageAbsolute",
 	"checkHelperPercentile",
 	"textWagePercentile",
+	"textConveyorPercentile",
+	"textFieldWorkPercentile",
 	"checkHelperFactA",
 	"textFactAval",
 	"textFactAfrom",
@@ -67,6 +69,9 @@ function BaNeMenuHelperFrame:InitSettings(helper)
 			self.textWageAbsolute:setDisabled(true)
 			self.textWagePercentile:setDisabled(false)
 		end
+		local tCP, tFWP = self:factorizePercent(self.helper.conveyorPercent,1),self:factorizePercent(self.helper.fieldworkPercent,1)
+		self.textConveyorPercentile:setText(tCP)
+		self.textFieldWorkPercentile:setText(tFWP)		
 		self.checkHelperFactA:setIsChecked(self.helper.factorA["enable"])
 		self.textFactAval:setText(string.format("%.1f",self.helper.factorA["factor"]))		
 		self.textFactAfrom:setText(string.format("%02d:%02d",self.helper.factorA["from_hours"],self.helper.factorA["from_minutes"]))
@@ -90,7 +95,7 @@ function BaNeMenuHelperFrame:factorizePercent(value, dir)
 		local vstring = string.match(tostring(value),"(%d+)")
 		if tonumber(vstring) ~= nil then
 			vstring = tonumber(vstring) / 100
-			ret = math.round(tonumber(vstring),0.1)
+			ret = math.round(tonumber(vstring),0.01)
 			return ret
 		else
 			return nil
@@ -246,7 +251,7 @@ function BaNeMenuHelperFrame:onEnterPressedWageValuePer()
 		factor = factor:gsub("%%","")
 	end
 	if tonumber(factor) ~= self.helper.wagePercentile and tonumber(factor) ~= nil then
-		factor = math.round(tonumber(factor),0.1)
+		factor = math.round(tonumber(factor),0.01)
 		self.helper.wagePercentile = factor
 		self.textWagePercentile:setText(self:factorizePercent(self.helper.wagePercentile,1))
 		if g_BaNe.debug then
@@ -256,6 +261,48 @@ function BaNeMenuHelperFrame:onEnterPressedWageValuePer()
 		self.textWagePercentile:setText(self:factorizePercent(self.helper.wagePercentile,1))
 		if g_BaNe.debug then
 			print("ooo BaNeMenuHelperFrame:onEnterPressedWageValuePer, old factor value ="..tostring(self.helper.wagePercentile).." vs new factor ="..tostring(factor).." ooo")
+		end
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedConveyorValuePer()
+	local factor = self:factorizePercent(self.textConveyorPercentile.text,0)
+	local valid = validateString(factor,"%d+%%")
+	if valid then
+		factor = factor:gsub("%%","")
+	end
+	if tonumber(factor) ~= self.helper.conveyorPercent and tonumber(factor) ~= nil then
+		factor = math.round(tonumber(factor),0.01)
+		self.helper.conveyorPercent = factor
+		self.textConveyorPercentile:setText(self:factorizePercent(self.helper.conveyorPercent,1))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedConveyorValuePer, new wage value ="..tostring(self.helper.conveyorPercent).." ooo")
+		end
+	else
+		self.textConveyorPercentile:setText(self:factorizePercent(self.helper.conveyorPercent,1))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedConveyorValuePer, old factor value ="..tostring(self.helper.conveyorPercent).." vs new factor ="..tostring(factor).." ooo")
+		end
+	end
+end
+
+function BaNeMenuHelperFrame:onEnterPressedFieldWorkValuePer()
+	local factor = self:factorizePercent(self.textFieldWorkPercentile.text,0)
+	local valid = validateString(factor,"%d+%%")
+	if valid then
+		factor = factor:gsub("%%","")
+	end
+	if tonumber(factor) ~= self.helper.fieldworkPercent and tonumber(factor) ~= nil then
+		factor = math.round(tonumber(factor),0.01)
+		self.helper.fieldworkPercent = factor
+		self.textFieldWorkPercentile:setText(self:factorizePercent(self.helper.fieldworkPercent,1))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFieldWorkValuePer, new wage value ="..tostring(self.helper.fieldworkPercent).." ooo")
+		end
+	else
+		self.textFieldWorkPercentile:setText(self:factorizePercent(self.helper.fieldworkPercent,1))
+		if g_BaNe.debug then
+			print("ooo BaNeMenuHelperFrame:onEnterPressedFieldWorkValuePer, old factor value ="..tostring(self.helper.fieldworkPercent).." vs new factor ="..tostring(factor).." ooo")
 		end
 	end
 end
@@ -270,7 +317,7 @@ end
 function BaNeMenuHelperFrame:onEnterPressedFactAValue()
 	local newVal = self.textFactAval.text
 	if newVal ~= self.helper.factorA["factor"] and tonumber(newVal) ~= nil then
-			newVal = math.round(tonumber(newVal),0.1)
+			newVal = math.round(tonumber(newVal),0.01)
 			self.helper.factorA["factor"] = newVal
 			self.textFactAval:setText(string.format("%.1f",self.helper.factorA["factor"]))
 			if g_BaNe.debug then
@@ -340,7 +387,7 @@ end
 function BaNeMenuHelperFrame:onEnterPressedFactBValue()
 	local newVal = self.textFactBval.text
 	if newVal ~= self.helper.factorB["factor"] and tonumber(newVal) ~= nil then
-			newVal = math.round(tonumber(newVal),0.1)
+			newVal = math.round(tonumber(newVal),0.01)
 			self.helper.factorB["factor"] = newVal
 			self.textFactBval:setText(string.format("%.1f",self.helper.factorB["factor"]))
 			if g_BaNe.debug then

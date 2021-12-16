@@ -15,12 +15,85 @@
 -- v0.0.1a - initial alpha release for internal testing (021221)
 
 function BaNe:inject_helper()
-	AIJob.getPricePerMs = Utils.overwrittenFunction(AIJob.getPricePerMs, self.getWagePerMs)
+	self.AIJobOrigPrice = AIJob.getPricePerMs
+	self.AIJobConveyorOrigPrice = AIJobConveyor.getPricePerMs
+	self.AIJobFieldWorkOrigPrice = AIJobFieldWork.getPricePerMs
+	if AIJob:getPricePerMs() ~= nil then
+		AIJob.getPricePerMs = Utils.overwrittenFunction(AIJob.getPricePerMs, self.NormalWage)
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't inject AIJob.getPricePerMs ooo")
+		end
+	end
+	if AIJobConveyor:getPricePerMs() ~= nil then
+		AIJobConveyor.getPricePerMs = Utils.overwrittenFunction(AIJobConveyor.getPricePerMs, self.ConveyorWage)
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't inject AIJobConveyor.getPricePerMs ooo")
+		end
+	end
+	if AIJobFieldWork:getPricePerMs() ~= nil then
+		AIJobFieldWork.getPricePerMs = Utils.overwrittenFunction(AIJobFieldWork.getPricePerMs, self.FieldWorkWage)
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't inject AIJobFieldWork.getPricePerMs ooo")
+		end
+	end
 end
 
-function BaNe:getWagePerMs(superFunc, ...)
+function BaNe:NormalWage(superFunc,...)
+	local ret = nil
+	ret = BaNe:getWagePerMs("normal")
+	if ret ~= nil then
+		return ret
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't get the Wage for 'normal' jobs ooo")
+		end
+		return superFunc(self,...)
+	end
+end
+
+function BaNe:ConveyorWage(superFunc,...)
+	local ret = nil
+	ret = BaNe:getWagePerMs("conveyor")
+	if ret ~= nil then
+		return ret
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't get the Wage for 'conveyor' jobs ooo")
+		end
+		return superFunc(self,...)
+	end
+end
+
+function BaNe:FieldWorkWage(superFunc,...)
+	local ret = nil
+	ret = BaNe:getWagePerMs("fieldwork")
+	if ret ~= nil then
+		return ret
+	else
+		if g_BaNe.debug then
+			print("ooo BaNe couldn't get the Wage for 'fieldwork' jobs ooo")
+		end
+		return superFunc(self,...)
+	end
+end
+
+function BaNe:getWagePerMs(jobType)	
+	local jobFactor = nil
+	if jobType == "normal" then
+		jobFactor = 1.0
+	elseif jobType == "conveyor" then
+		jobFactor = g_BaNe.settings.helper.conveyorPercent
+	elseif jobType == "fieldwork" then
+		jobFactor = g_BaNe.settings.helper.fieldworkPercent
+	end
 	local wagePerHour = BaNe:getWagePerHour(g_BaNe.settings.helper.wageType, g_BaNe.settings.helper.wageAbsolute, g_BaNe.settings.helper.wagePercentile)
-	local actPricePerMs = wagePerHour / 60 / 60 / 1000;
+	local actPricePerMs = nil
+	if jobFactor ~= nil then
+		actPricePerMs = jobFactor * wagePerHour / 60 / 60 / 1000
+	end	
 	local facA, facB = g_BaNe.settings.helper.factorA, g_BaNe.settings.helper.factorB
 	local eFac, nFac1, nFac2 = 1.0, facA["factor"], facB["factor"]
 	local currentTime = g_currentMission.environment.dayTime / 3600000
@@ -110,7 +183,7 @@ function BaNe:getWagePerMs(superFunc, ...)
 		end
 		
 		if g_BaNe.debug then
-			print("ooo BaNe Debug ... BaNe:getWagePerMs ++ wagePerHour="..tostring(wagePerHour).." ,nFac1="..tostring(nFac1).." ,nFac2="..tostring(nFac2).." ,actPricePerMs="..tostring(actPricePerMs)..", eFac="..tostring(eFac).." ooo")
+			print("ooo BaNe Debug ... BaNe:getWagePerMs ++ type="..tostring(jobType).." ,wagePerHour="..tostring(wagePerHour).." ,nFac1="..tostring(nFac1).." ,nFac2="..tostring(nFac2).." ,actPricePerMs="..tostring(actPricePerMs)..", eFac="..tostring(eFac).." ooo")
 			print("ooo BaNe Debug ... BaNe:getWagePerMs ++ nFac1 valid from (included):"..string.format("%02d:%02d - %02d:%02d", fhrsA, fminA, thrsA, tminA).." ooo")
 			print("ooo BaNe Debug ... BaNe:getWagePerMs ++ nFac2 valid from (included):"..string.format("%02d:%02d - %02d:%02d", fhrsB, fminB, thrsB, tminB).." ooo")
 		end
@@ -119,6 +192,6 @@ function BaNe:getWagePerMs(superFunc, ...)
 		if g_BaNe.debug then
 			print("ooo BaNe Debug ... BaNe:getPricePerMs ++ returning to superFunc() ooo")
 		end
-		return superFunc(self, ...)
+		return nil
 	end
 end
