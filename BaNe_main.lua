@@ -1,11 +1,12 @@
 -- Business administration & national economy (for FS22)
 -- main faile: BaNe_main.lua
-local version = "1.0.0b"
+local version = "1.0.1b"
 --
 -- @author [kwa:m]
--- @date 15.12.2021
+-- @date 16.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.0.1b - added jobType branch in helper factors
 -- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
 -- v0.6.0a - added customizable nighttime/overtime factors
 -- v0.5.0a - done GUI general layout, changed initialization process
@@ -78,7 +79,9 @@ function BaNe:loadMap()
 						-- wagePerHour
 						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#wageType"), g_BaNe.settings.helper.wageType)
 						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wageAbsolute"), g_BaNe.settings.helper.wageAbsolute)
-						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wagePercentile"), g_BaNe.settings.helper.wagePercentile)						
+						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wagePercentile"), g_BaNe.settings.helper.wagePercentile)	
+						helper.conveyorPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#conveyorPercent"), g_BaNe.settings.helper.conveyorPercent)
+						helper.fieldworkPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#fieldworkPercent"), g_BaNe.settings.helper.fieldworkPercent)
 						-- nighttime factors
 						helper.factorA["enable"] = Utils.getNoNil(getXMLBool(xmlFile, key.."#helper_enableFactor_A"), g_BaNe.settings.helper.factorA["enable"])
 						helper.factorA["factor"] = math.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_A"), g_BaNe.settings.helper.factorA["factor"]), 0.1)
@@ -253,6 +256,8 @@ function BaNe:saveSettings()
 	setXMLInt(xmlFile, key.."#wageType", g_BaNe.settings.helper.wageType)
 	setXMLFloat(xmlFile, key.."#wageAbsolute", g_BaNe.settings.helper.wageAbsolute)
 	setXMLFloat(xmlFile, key.."#wagePercentile", g_BaNe.settings.helper.wagePercentile)
+	setXMLFloat(xmlFile, key.."#conveyorPercent", g_BaNe.settings.helper.conveyorPercent)
+	setXMLFloat(xmlFile, key.."#fieldworkPercent", g_BaNe.settings.helper.fieldworkPercent)
 	-- nighttime factors
 	setXMLBool(xmlFile, key.."#helper_enableFactor_A", g_BaNe.settings.helper.factorA["enable"])
 	setXMLFloat(xmlFile, key.."#helper_nightFactor_A", g_BaNe.settings.helper.factorA["factor"])
@@ -279,6 +284,8 @@ function BaNe:setDefaults()
 	helper.wageType = 1 -- 1=absolute, 2=percentile
 	helper.wageAbsolute = 800.0 -- 800.0 seems to be the smallest reasonable number (= 0.00022 per ms)
 	helper.wagePercentile = 1.0 -- 1.0 = 100%
+	helper.conveyorPercent = 1.25 -- 1.25 = 125%
+	helper.fieldworkPercent = 1.25 -- 1.25 = 125%
 	--helper.wagePerHour = BaNe:getWagePerHour(helper.wageType, helper.wageAbsolute, helper.wagePercentile)
 	helper.factorA = {}
 	helper.factorB = {}
@@ -309,7 +316,7 @@ function BaNe:getWagePerHour(wageType,wageAbs,wagePer)
 		if wageType == 1 then
 			ret = wageAbs
 		elseif wageType == 2 then
-			ret = 0.001 * 3600 * 1000 * wagePer
+			ret = 0.0004 * 3600 * 1000 * wagePer
 			ret = math.round(ret, 0.1)
 		else
 			print("ooo BaNe:getWagePerHour: couldn't find valid wageType (="..tostring(wageType).." of type '"..tostring(type(wageType)).."')! falling back to 800.0 per Hour absolute! ooo")

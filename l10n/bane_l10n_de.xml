@@ -28,6 +28,12 @@
 		<text name="uiBaNe_helperWagePercentile" text="Arbeitslohn in Prozent."/>
 		<text name="uiBaNe_tt_helperWagePercentile" text="Gezahlter Arbeitslohn in Prozent vom Originalwert. (!FORMAT: ohne %-Zeichen!)"/>
 		
+		<text name="uiBaNe_helperJobTypes" text="Arbeitstyp-Faktoren"/>
+		<text name="uiBaNe_helperConveyorPercentile" text="Förderbänder"/>
+		<text name="uiBaNe_tt_helperConveyorPercentile" text="Arbeitslohn für Förderbänder in Prozent. (Std: 125%)"/>
+		<text name="uiBaNe_helperFieldWorkPercentile" text="Feldarbeit"/>
+		<text name="uiBaNe_tt_helperFieldWorkPercentile" text="Arbeitslohn für Feldarbeit in Prozent. (Std: 125%)"/>
+		
 		<text name="uiBaNe_helperOTFactA" text="Faktor für Arbeitszeit (A)"/>
 		<text name="uiBaNe_helperFactAen" text="Aktivieren"/>
 		<text name="uiBaNe_tt_helperFactAen" text="Aktiviert die unten angegebenen Einstellungen."/>

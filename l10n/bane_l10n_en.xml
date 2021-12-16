@@ -28,6 +28,12 @@
 		<text name="uiBaNe_helperWagePercentile" text="Wage in Percent"/>
 		<text name="uiBaNe_tt_helperWagePercentile" text="Paid wage per hour in percent of default value. (!FORMAT: without %-char!)"/>
 		
+		<text name="uiBaNe_helperJobTypes" text="Job Type Factors"/>
+		<text name="uiBaNe_helperConveyorPercentile" text="Conveyors"/>
+		<text name="uiBaNe_tt_helperConveyorPercentile" text="Accounted wage for conveyors in percent. (Def: 125%)"/>
+		<text name="uiBaNe_helperFieldWorkPercentile" text="Field Work"/>
+		<text name="uiBaNe_tt_helperFieldWorkPercentile" text="Accounted wage for conveyors in percent. (Def: 125%)"/>
+		
 		<text name="uiBaNe_helperOTFactA" text="Factor for Working Hours (A)"/>
 		<text name="uiBaNe_helperFactAen" text="Enable"/>
 		<text name="uiBaNe_tt_helperFactAen" text="Enables the set parameters below."/>

@@ -40,6 +40,20 @@
                     <GuiElement type="text" baneTextID="uiBaNe_tt_helperWagePercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperWagePercentile" />
                 </GuiElement>
 				
+				<GuiElement type="text" profile="settingsMenuSubtitle" baneTextID="uiBaNe_helperJobTypes" text="helperJobTypes" />
+				
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textConveyorPercentile" onEnterPressed="onEnterPressedConveyorValuePer" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperConveyorPercentile" profile="multiTextOptionSettingsTitle" text="helperConveyorPercentile"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperConveyorPercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperConveyorPercentile" />
+                </GuiElement>
+				
+				<GuiElement type="empty" profile="ingameMenuGameSettingsTextInputWrapper">
+                    <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFieldWorkPercentile" onEnterPressed="onEnterPressedFieldWorkValuePer" imeKeyboardType="normal" />
+                    <GuiElement type="text" baneTextID="uiBaNe_helperFieldWorkPercentile" profile="multiTextOptionSettingsTitle" text="helperFieldWorkPercentile"/>
+                    <GuiElement type="text" baneTextID="uiBaNe_tt_helperFieldWorkPercentile" profile="multiTextOptionSettingsTooltip" text="tt_helperFieldworkPercentile" />
+                </GuiElement>
+				
 				<GuiElement type="text" profile="settingsMenuSubtitle" baneTextID="uiBaNe_helperOTFactA" text="helperOTFactA" />
 				
 				<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickHelperFactA" id="checkHelperFactA">
@@ -90,16 +104,7 @@
                     <GuiElement type="textInput" profile="ingameMenuGameSettingsTextInput" id="textFactBto" onEnterPressed="onEnterPressedFactBTimeTo" imeKeyboardType="normal" />
                     <GuiElement type="text" baneTextID="uiBaNe_helperFactBto" profile="multiTextOptionSettingsTitle" text="helperFactBto"/>
                     <GuiElement type="text" baneTextID="uiBaNe_tt_helperFactBto" profile="multiTextOptionSettingsTooltip" text="tt_helperFactBto" />
-                </GuiElement>
-
-<!--                 <GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickCheckbox" id="checkHelpIcons">
-                    <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
-                    <GuiElement type="button" profile="multiTextOptionSettingsRight"/>
-                    <GuiElement type="text"   profile="multiTextOptionSettingsText" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTitle" text="$l10n_setting_helpIconsOnMap"/>
-                    <GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
-                    <GuiElement type="text"   profile="multiTextOptionSettingsTooltip" text="$l10n_toolTip_helpIcons" />
-                </GuiElement> -->                
+                </GuiElement>           
             </GuiElement>
         </GuiElement>
     </GuiElement>
