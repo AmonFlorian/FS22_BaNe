@@ -1,11 +1,12 @@
 -- Business administration & national economy (for FS22)
 -- helper changes file: BaNe_helper.lua
--- v1.0.0b
+-- v1.0.1b
 --
 -- @author [kwa:m]
--- @date 15.12.2021
+-- @date 16.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.0.1b - added jobType branch in helper factors
 -- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
 -- v0.6.0a - added customizable nighttime/overtime factors
 -- v0.5.0a - done GUI general layout, changed initialization process

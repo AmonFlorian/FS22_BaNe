@@ -1,11 +1,13 @@
 -- Business administration & national economy (for FS22)
 -- main faile: BaNe_main.lua
-local version = "1.0.1b"
+local version = "1.1.5b"
 --
 -- @author [kwa:m]
--- @date 16.12.2021
+-- @date 17.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.1.5b - base UI has option besides buying farmland to lease the farmland (to be implemented) - price is per field ha not like buyprice for farmland ha
+-- v1.1.0b - added first iteration of field pricing
 -- v1.0.1b - added jobType branch in helper factors
 -- v1.0.0b - finished helper settings w/ working GUI (able to present as SP beta version)
 -- v0.6.0a - added customizable nighttime/overtime factors
@@ -31,7 +33,7 @@ function BaNe.new(i18n)
 	self={}
 	setmetatable(self, BaNe_mt)
 	self.version = version
-	self.debug = false
+	self.debug = true
 	self.mdir = modDir
 	self.mname = modName
 	-- Initialize standard values
@@ -47,8 +49,10 @@ function BaNe.new(i18n)
 end
 
 function BaNe:loadMap()
-	source(Utils.getFilename("scripts/BaNe_helper.lua", self.mdir))
 	source(Utils.getFilename("scripts/BaNe_luautils.lua", self.mdir))
+	source(Utils.getFilename("scripts/BaNe_helper.lua", self.mdir))
+	source(Utils.getFilename("scripts/BaNe_fields.lua", self.mdir))	
+	local fields = g_BaNe.settings.fields
 	local helper = g_BaNe.settings.helper
 	print("ooo BaNe debugging enabled? ooo "..tostring(self.debug).." ooo")
 	if self.debug then
@@ -75,13 +79,15 @@ function BaNe:loadMap()
 					local sgXmlVersion = Utils.getNoNil(getXMLString(xmlFile, key.."#version"), "0.0.0")
 						print("ooo loading BaNe v".. self.version .. " ooo loading savedata ooo")
 					if tostring(sgXmlVersion) == tostring(self.version) then
-						
+						--
+						-- helper
+						--
 						-- wagePerHour
-						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#wageType"), g_BaNe.settings.helper.wageType)
-						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wageAbsolute"), g_BaNe.settings.helper.wageAbsolute)
-						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#wagePercentile"), g_BaNe.settings.helper.wagePercentile)	
-						helper.conveyorPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#conveyorPercent"), g_BaNe.settings.helper.conveyorPercent)
-						helper.fieldworkPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#fieldworkPercent"), g_BaNe.settings.helper.fieldworkPercent)
+						helper.wageType = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_wageType"), g_BaNe.settings.helper.wageType)
+						helper.wageAbsolute = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_wageAbsolute"), g_BaNe.settings.helper.wageAbsolute)
+						helper.wagePercentile = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_wagePercentile"), g_BaNe.settings.helper.wagePercentile)	
+						helper.conveyorPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_conveyorPercent"), g_BaNe.settings.helper.conveyorPercent)
+						helper.fieldworkPercent = Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_fieldworkPercent"), g_BaNe.settings.helper.fieldworkPercent)
 						-- nighttime factors
 						helper.factorA["enable"] = Utils.getNoNil(getXMLBool(xmlFile, key.."#helper_enableFactor_A"), g_BaNe.settings.helper.factorA["enable"])
 						helper.factorA["factor"] = math.round(Utils.getNoNil(getXMLFloat(xmlFile, key.."#helper_nightFactor_A"), g_BaNe.settings.helper.factorA["factor"]), 0.1)
@@ -96,6 +102,11 @@ function BaNe:loadMap()
 						helper.factorB["from_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_ftm"), g_BaNe.settings.helper.factorB["from_minutes"])
 						helper.factorB["to_hours"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_tth"), g_BaNe.settings.helper.factorB["to_hours"])
 						helper.factorB["to_minutes"] = Utils.getNoNil(getXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm"), g_BaNe.settings.helper.factorB["to_minutes"])
+						--
+						-- fields
+						--
+						-- leasing factor
+						fields.leaseFactor = Utils.getNoNil(getXMLFloat(xmlFile, key.."#fields_leaseFactor"), g_BaNe.settings.fields.leaseFactor)
 					else
 						print("ooo found settings are for BaNe v".. sgXmlVersion .. " - using defaults for used version v"..tostring(self.version).." ooo")						
 					end
@@ -110,6 +121,7 @@ function BaNe:loadMap()
 		end;	
 	end;
 	self.settings.helper = helper
+	self.settings.fields = fields
 	if g_BaNe.debug then
 		print("ooo g_BaNe settings after load ---> ooo")
 		DebugUtil.printTableRecursively(g_BaNe.settings ,"_",0,4)
@@ -177,6 +189,7 @@ function BaNe:LoadMissionDone(mission)
 	end
 	-- Replace wage return values
 	self:inject_helper()
+	self:inject_fields()
 end
 
 function BaNe:loadSavegame() 
@@ -249,15 +262,16 @@ function BaNe:saveSettings()
 	
 	-- version
 	setXMLString(xmlFile, key.."#version", g_BaNe.version)
-	
-	--helper values
-	
+
+	--
+	-- helper
+	--	
 	-- wagePerHour
-	setXMLInt(xmlFile, key.."#wageType", g_BaNe.settings.helper.wageType)
-	setXMLFloat(xmlFile, key.."#wageAbsolute", g_BaNe.settings.helper.wageAbsolute)
-	setXMLFloat(xmlFile, key.."#wagePercentile", g_BaNe.settings.helper.wagePercentile)
-	setXMLFloat(xmlFile, key.."#conveyorPercent", g_BaNe.settings.helper.conveyorPercent)
-	setXMLFloat(xmlFile, key.."#fieldworkPercent", g_BaNe.settings.helper.fieldworkPercent)
+	setXMLInt(xmlFile, key.."#helper_wageType", g_BaNe.settings.helper.wageType)
+	setXMLFloat(xmlFile, key.."#helper_wageAbsolute", g_BaNe.settings.helper.wageAbsolute)
+	setXMLFloat(xmlFile, key.."#helper_wagePercentile", g_BaNe.settings.helper.wagePercentile)
+	setXMLFloat(xmlFile, key.."#helper_conveyorPercent", g_BaNe.settings.helper.conveyorPercent)
+	setXMLFloat(xmlFile, key.."#helper_fieldworkPercent", g_BaNe.settings.helper.fieldworkPercent)
 	-- nighttime factors
 	setXMLBool(xmlFile, key.."#helper_enableFactor_A", g_BaNe.settings.helper.factorA["enable"])
 	setXMLFloat(xmlFile, key.."#helper_nightFactor_A", g_BaNe.settings.helper.factorA["factor"])
@@ -271,7 +285,12 @@ function BaNe:saveSettings()
 	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ftm", g_BaNe.settings.helper.factorB["from_minutes"])
 	setXMLInt(xmlFile, key.."#helper_nightFactor_B_tth", g_BaNe.settings.helper.factorB["to_hours"])
 	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm", g_BaNe.settings.helper.factorB["to_minutes"])
-
+	--
+	-- fields
+	--
+	-- leaseFactor
+	setXMLFloat(xmlFile, key.."#fields_leaseFactor", g_BaNe.settings.fields.leaseFactor)
+	
 	saveXMLFile(xmlFile)
 	delete(xmlFile)
 	print "ooo BaNe settings saved! ooo"
@@ -280,7 +299,12 @@ end;
 function BaNe:setDefaults()
 	local settings = {}
 	local general = {}
+	
 	local helper = {}
+	--
+	-- helper
+	--
+	--wageSettings
 	helper.wageType = 1 -- 1=absolute, 2=percentile
 	helper.wageAbsolute = 800.0 -- 800.0 seems to be the smallest reasonable number (= 0.00022 per ms)
 	helper.wagePercentile = 1.0 -- 1.0 = 100%
@@ -301,7 +325,13 @@ function BaNe:setDefaults()
 	helper.factorB["from_minutes"] = 0
 	helper.factorB["to_hours"] = 6
 	helper.factorB["to_minutes"] = 0
+	
 	local fields = {}
+	--
+	-- fields
+	--
+	fields.leaseFactor = 0.015 -- 1.5%
+	
 	local shops = {}		
 	settings.general = general
 	settings.helper = helper

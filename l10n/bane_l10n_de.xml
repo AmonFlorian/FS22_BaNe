@@ -56,6 +56,11 @@
 
         <!-- FieldPrices XML -->
         <text name="uiBaNe_fieldPricesHeader" text="BaNe - Feldpreise"/>
+		<text name="uiBaNe_buttonLeaseFarmland" text="PACHTEN"/>
+		<text name="uiBaNe_leaseFarmland_title" text="Farmland pachten"/>
+		<text name="uiBaNe_textLeaseOption" text="Bitte wähle die Laufzeit der Pacht über %s pro Jahr."/>
+		<text name="uiBaNe_leaseYear" text="Jahr"/>
+		<text name="uiBaNe_leaseYears" text="Jahre"/>
 
         <!-- ShopPrices XML -->
         <text name="uiBaNe_shopPricesHeader" text="BaNe - Händlerpreise"/>  

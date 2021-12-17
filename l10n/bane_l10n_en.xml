@@ -55,6 +55,11 @@
 		<text name="uiBaNe_tt_helperFactBto" text="Set multiplier applies until this ending time. (!FORMAT: HH:MM!)"/>
         <!-- FieldPrices XML -->
         <text name="uiBaNe_fieldPricesHeader" text="BaNe - Field Prices"/>
+		<text name="uiBaNe_buttonLeaseFarmland" text="LEASE"/>
+		<text name="uiBaNe_leaseFarmland_title" text="Lease Farmland"/>
+		<text name="uiBaNe_textLeaseOption" text="Please choose the runtime of the lease for %s per year."/>
+		<text name="uiBaNe_leaseYear" text="Year"/>
+		<text name="uiBaNe_leaseYears" text="Years"/>
 
         <!-- ShopPrices XML -->
         <text name="uiBaNe_shopPricesHeader" text="BaNe - Shop Prices"/>  
