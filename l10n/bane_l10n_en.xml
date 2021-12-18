@@ -13,6 +13,7 @@
 		<text name="uiBaNe_savebutton" text="Save settings"/>
 		<text name="uiBaNe_backbutton" text="Back"/>
 		<text name="uiBaNe_cancelbutton" text="Cancel"/>
+		<text name="uiBaNe_savedSettings" text="Settings saved"/>
 
         <!-- Main XML -->
         <text name="uiBaNe_mainHeader" text="BaNe - General"/>

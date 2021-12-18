@@ -183,7 +183,14 @@ function BaNeMenu:onClose(element)
 end
 
 function BaNeMenu:onButtonSaveSettings()
-	BaNe:saveSettings()
+	BaNe:saveSet(g_BaNe.settings)
+	g_gui:showInfoDialog({
+		visible = true,
+		dialogType = DialogElement.TYPE_INFO,
+		text = g_i18n:getText("uiBaNe_savedSettings"),
+		isCloseAllowed = true
+	})
+	
 end
 
 --function BaNeMenu:onButtonQuit()

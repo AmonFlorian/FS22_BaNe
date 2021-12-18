@@ -69,7 +69,7 @@ function BaNe.new(i18n)
 	self={}
 	setmetatable(self, BaNe_mt)
 	self.version = version
-	self.debug = true
+	self.debug = false
 	self.mdir = modDir
 	self.mname = modName
 	-- Initialize standard values
@@ -91,7 +91,7 @@ function BaNe:loadMap()
 	end
 	
 	-- Save current settings on gamesave
-	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, self.saveSettings)
+	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, self.saveSet)
 	
 	--load Savegame
 	local sgIndex = g_currentMission.missionInfo.savegameIndex
@@ -246,6 +246,9 @@ function BaNe:loadSetRec(nodePath, parent)
 end
 
 function BaNe:saveSet(settings)
+	if settings == nil then
+		settings = g_BaNe.settings
+	end
 	local sgIndex = g_currentMission.missionInfo.savegameIndex
 	local sgFolderPath = g_currentMission.missionInfo.savegameDirectory
 	if sgFolderPath == nil then
@@ -547,7 +550,6 @@ function BaNe.readXMLBool(xmlFile, key)
 	return getXMLBool(xmlFile, key)
 end
 function BaNe.readXMLFloat(xmlFile, key, round)
-	print(tostring(math.round(getXMLFloat(xmlFile, key), round)).." with round="..tostring(round))
 	return math.round(getXMLFloat(xmlFile, key), round)
 end
 function BaNe.readXMLInt(xmlFile, key)
