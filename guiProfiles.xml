@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUIProfiles>
+
+    <Presets>
+        <Preset name="colorTransparent" value="0 0 0 0"/>
+
+        <Preset name="colorGlass" value="0.0036 0.0056 0.0065 0.5"/>
+        <!-- <Preset name="colorGlass" value="0.0097 0.0365 0.0550 0.5"/> -->
+        <!-- <Preset name="colorGlass" value="0.015 0.015 0.018 0.6"/> -->
+        <Preset name="colorGlass_50" value="0.0036 0.0056 0.0065 0.25"/>
+
+        <Preset name="colorGlassVeryLight" value="0.715 0.715 0.718 0.04"/>
+        <Preset name="colorGlassExtremelyLight" value="0.915 0.915 0.918 0.15"/>
+        <Preset name="colorGlassMedium" value="0.115 0.115 0.118 0.20"/>
+        <Preset name="colorGlassDark" value="0.015 0.015 0.018 0.65"/>
+        <Preset name="colorGlassLight" value="0.715 0.715 0.718 0.25"/>
+        <Preset name="colorGlassLight_50" value="0.715 0.715 0.718 0.0625"/>
+        <Preset name="colorGlassLight_75" value="0.715 0.715 0.718 0.09375"/>
+        <Preset name="colorGlassVeryDark" value="0.015 0.015 0.018 0.85"/>
+
+        <Preset name="colorMainUI"    value="0.0227 0.5346 0.8519 1.0"/>
+        <Preset name="colorMainUI_80" value="0.0227 0.5346 0.8519 0.8"/>
+        <Preset name="colorMainUI_70" value="0.0227 0.5346 0.8519 0.7"/>
+        <Preset name="colorMainUI_60" value="0.0227 0.5346 0.8519 0.6"/>
+        <Preset name="colorMainUI_50" value="0.0227 0.5346 0.8519 0.5"/>
+        <Preset name="colorMainUI_40" value="0.0227 0.5346 0.8519 0.4"/>
+        <Preset name="colorMainUI_30" value="0.0227 0.5346 0.8519 0.3"/>
+        <Preset name="colorMainUI_20" value="0.0227 0.5346 0.8519 0.2"/>
+        <Preset name="colorMainUI_10" value="0.0227 0.5346 0.8519 0.1"/>
+        <Preset name="colorMainUI_6"  value="0.0227 0.5346 0.8519 0.06"/>
+        <!-- <Preset name="colorMainUI_50" value="0.0260 0.3944 0.7373 0.5"/> -->
+        <Preset name="colorMainUIAlt" value="0.9900 0.4640 0.0010 1"/>
+        <Preset name="colorDisabled" value="0.4 0.4 0.4 1"/>
+
+        <Preset name="colorWhite" value="1 1 1 1"/>
+        <Preset name="colorWhite_50" value="1 1 1 0.5"/>
+        <Preset name="colorWhite_25" value="1 1 1 0.25"/>
+        <Preset name="colorRed" value="0.8069 0.0097 0.0097 1"/>
+        <Preset name="colorRed_50" value="0.8069 0.0097 0.0097 0.5"/>
+        <Preset name="colorRed_75" value="0.8069 0.0097 0.0097 0.75"/>
+        <Preset name="colorDarkRed" value="0.2832 0.0091 0.0091 1"/>
+        <Preset name="colorDarkRed_75" value="0.2832 0.0091 0.0091 0.75"/>
+        <Preset name="colorDarkRed_50" value="0.2832 0.0091 0.0091 0.5"/>
+        <Preset name="colorBlue" value="0.0742 0.4341 0.6939 1"/>
+        <Preset name="colorGreen" value="0.3763 0.6038 0.0782 1"/>
+        <Preset name="colorGreen2" value="0.2122 0.5271 0.0307 1" />
+        <Preset name="colorOrange" value="0.8 0.4 0 1" />
+
+        <Preset name="colorBlack" value="0 0 0 1"/>
+        <Preset name="colorBlack2" value="0.0075 0.0075 0.0075 1"/>
+        <Preset name="colorBlack3" value="0.013 0.013 0.013 1"/>
+        <Preset name="colorBlack3_97" value="0.013 0.013 0.013 0.97"/>
+        <Preset name="colorBlack3_90" value="0.013 0.013 0.013 0.9"/>
+        <Preset name="colorBlack3_70" value="0.013 0.013 0.013 0.7"/>
+        <Preset name="colorBlack3_0" value="0.013 0.013 0.013 0"/>
+
+        <Preset name="colorDarkGrey" value="0.0284 0.0284 0.0284 1"/>
+        <Preset name="colorDarkGrey_0" value="0.0284 0.0284 0.0284 0"/>
+        <Preset name="colorDarkGrey2" value="0.0630 0.0630 0.0630 1"/>
+        <Preset name="colorDarkGrey2_50" value="0.0630 0.0630 0.0630 0.5"/>
+        <Preset name="colorDarkGrey2_70" value="0.0630 0.0630 0.0630 0.7"/>
+        <Preset name="colorDarkGrey3" value="0.0194 0.0194 0.0194 1"/>
+        <Preset name="colorDarkGrey4" value="0.0723 0.0723 0.0723 1"/>
+        <Preset name="colorDarkGrey5" value="0.1356 0.1356 0.1356 1"/>
+        <Preset name="colorDarkGrey6" value="0.03 0.03 0.03 1"/>
+        <Preset name="colorDarkGrey7" value="0.0212 0.0212 0.0212 1"/>
+
+        <Preset name="colorLightGrey" value="0.0482 0.0482 0.0482 1"/>
+
+        <Preset name="colorDescriptionText" value="0.1329 0.2086 0.2232 1"/>
+        <Preset name="colorDescriptionText2" value="0.4000 0.4941 0.5137 1"/>
+        <Preset name="colorDescriptionText3" value="0.1845 0.1845 0.1845 1"/>
+        <Preset name="colorDescriptionText4" value="0.6307 0.6307 0.6307 1"/>
+
+        <Preset name="colorTextOnLight" value="0 0 0 1"/>
+        <Preset name="colorTextOnDark" value="1 1 1 1"/>
+
+        <!-- Content based presets -->
+
+        <Preset name="colorListRowAlternateBackground" value="0.3140 0.8069 1.0000 0.08" />
+        <Preset name="colorListRowBackground" value="0.3140 0.8069 1.0000 0.02" />
+        <Preset name="colorListHeaderBackground" value="0 0 0 0.35" />
+
+        <Preset name="colorSliderBackground" value="$preset_colorGlassLight_50" />
+        <Preset name="colorSlider" value="$preset_colorGlassLight" />
+        <Preset name="colorSliderHighlight" value="$preset_colorGlassMedium" />
+        <Preset name="colorSliderKnob" value="$preset_colorWhite" />
+        <Preset name="colorDialogBackdrop" value="$preset_colorBlack3_97" />
+        <Preset name="colorDialogBackdropMobile" value="$preset_colorBlack3_97" />
+
+        <Preset name="colorItemBgNormal" value="0.0036 0.0056 0.0065 0.5" />
+        <Preset name="colorItemBgSelected" value="0.0036 0.0056 0.0065 0.85" />
+        <Preset name="colorSeparator" value="0.1882 0.2274 0.2274 1" />
+        <Preset name="colorSelectorInactive" value="0.2196 0.2667 0.2784 1" />
+
+        <Preset name="imageFocusBackgroundGradient" value="9px 9px 510px 30px" />
+        <!-- <Preset name="imageFocusBackgroundGradient" value="8px 8px 512px 32px" /> -->
+        <Preset name="colorFocusBackgroundGradient" value="0.0227 0.5346 0.8519 1" />
+        <!--<Preset name="colorFocusBackgroundGradient" value="0.0003 0.2384 0.5467 1 0.0070 0.6172 0.8879 1 0.0003 0.2384 0.5467 1 0.0070 0.6172 0.8879 1" />-->
+
+        <Preset name="imageDoublesidedGradient" value="53px 65px 600px 2px" />
+
+        <Preset name="colorDetailBackground" value="0.3140 0.8069 1.0000 0.04" />
+        <Preset name="colorDialogBackground" value="0 0 0 0.8" />
+
+        <Preset name="colorCharacterCreation" value="0 0.1927 0.3412 1" />
+        <Preset name="colorCharacterCreation_10" value="0 0.1927 0.3412 0.1" />
+        <Preset name="colorCharacterCreation_20" value="0 0.1927 0.3412 0.2" />
+        <Preset name="colorCharacterCreation_30" value="0 0.1927 0.3412 0.3" />
+        <Preset name="colorCharacterCreation_40" value="0 0.1927 0.3412 0.4" />
+        <Preset name="colorCharacterCreation_60" value="0 0.1927 0.3412 0.6" />
+        <Preset name="colorCharacterCreation_70" value="0 0.1927 0.3412 0.7" />
+        <Preset name="colorCharacterCreation_80" value="0 0.1927 0.3412 0.8" />
+        <Preset name="colorCharacterCreation_90" value="0 0.1927 0.3412 0.9" />
+
+        <Preset name="colorHeaderText" value="0.1714 0.2122 0.2270 1" />
+
+        <!-- UVs -->
+        <Preset name="colorUVs" value="10px 1010px 4px 4px"/> <!-- small 4 pixel box in D:\code\lsim2019\bin\dataS\menu\hud\ui_elements_1080p.png -->
+        <Preset name="glassEdgeIconUVs" value="5px 53px 4px 8px"/>
+
+        <Preset name="colorTextShadow" value="0.0630 0.0630 0.0630 0.7"/>
+
+        <Preset name="keyBoardKeyUVs" value="96px 96px 48px 48px"/> <!-- the empty keyboard key -->
+        <Preset name="xbox_A_ButtonUVs" value="630px 342px 36px 36px"/> <!-- default XBOX key -->
+        <Preset name="ps4_X_ButtonUVs" value="822px 342px 36px 36px"/> <!-- default PS4 key -->
+        <Preset name="ps4_O_ButtonUVs" value="870px 342px 36px 36px"/> <!-- default PS4 JP key -->
+        <Preset name="arrowIconUVs" value="294px 342px 24px 36px"/>
+        <Preset name="diskIconUVs" value="48px 96px 48px 48px"/>
+        <Preset name="achievementIconUVs" value="0px 96px 48px 48px"/>
+    </Presets>	
+	
+	<Traits>
+	</Traits>
+	
+	<Profile name="uiBaNeMenuFieldsTableHeaderBox" extends="emptyPanel" with="anchorTopLeft">
+        <Value name="size" value="1400px 74px"/>
+        <Value name="alignmentX" value="left"/>
+        <Value name="alignmentY" value="bottom"/>
+        <Value name="imageColor" value="$preset_colorListHeaderBackground"/>
+        <Value name="flowDirection" value="horizontal"/>
+        <Value name="wrapAround" value="true"/>
+        <Value name="lateralFlowSize" value="104px"/>
+        <Value name="fitToElements" value="true"/>
+        <Value name="autoValidateLayout" value="true"/>
+        <Value name="hasFrame" value="false"/>
+
+        <Variant name="mobile">
+            <Value name="size" value="1768px 71px" />
+        </Variant>
+    </Profile>
+
+    <Profile name="uiBaNeMenuFieldsTableHeader" extends="ingameMenuTableHeader">
+        <Value name="size" value="230px 74px"/>
+        <Value name="handleFocus" value="true"/>
+        <Value name="allowSortingAsc" value="true"/>
+        <Value name="allowSortingDesc" value="true"/>
+        <Value name="iconHighlightedColor" value="$preset_colorMainUI"/>
+		
+		<Value name="textAlignment" value="left"/>
+        <Value name="textOffset" value="5px 0px"/>
+		
+        <Variant name="console">
+            <Value name="iconFocusedColor" value="$preset_colorMainUI"/>
+        </Variant>
+
+        <Variant name="mobile">
+            <Value name="size" value="333px 74px" />
+        </Variant>
+    </Profile>	
+	<Profile name="uiBaNeMenuFieldsTableHeaderFieldID" extends="ingameMenuTableHeader">
+        <Value name="allowSortingAsc" value="true"/>
+        <Value name="allowSortingDesc" value="true"/>
+        <Value name="size" value="250px 74px"/>
+        <Value name="iconSize" value="0"/>
+        <Value name="textAlignment" value="left"/>
+        <Value name="textOffset" value="25px 0px"/>
+
+        <Variant name="mobile">
+            <Value name="size" value="768px 74px"/>
+        </Variant>
+    </Profile>	
+	<Profile name="uiBaNeMenuFieldsTableHeaderSize" extends="uiBaNeMenuFieldsTableHeader">
+        <!-- <Value name="iconUVs" value="0px 816px 96px 96px"/> -->
+		<Value name="iconSize" value="0"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsTableHeaderLeasePrice" extends="uiBaNeMenuFieldsTableHeader">
+        <!-- <Value name="iconUVs" value="96px 816px 96px 96px"/> -->
+		<Value name="iconSize" value="0"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsTableHeaderLeaseStart" extends="uiBaNeMenuFieldsTableHeader">
+        <!-- <Value name="iconUVs" value="384px 816px 96px 96px"/> -->
+		<Value name="iconSize" value="0"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsTableHeaderLeaseEnd" extends="uiBaNeMenuFieldsTableHeader">
+        <!-- <Value name="iconUVs" value="288px 816px 96px 96px"/> -->
+		<Value name="iconSize" value="0"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsTableHeaderLeaseCancel" extends="uiBaNeMenuFieldsTableHeader">
+        <!-- <Value name="iconUVs" value="192px 816px 96px 96px"/> -->
+		<Value name="iconSize" value="0"/>
+    </Profile>
+	<Profile name="uiBaNeMenuFieldsTableHeaderSortAscending" extends="joinGameScreenListHeaderSortAscending">
+        <Value name="position" value="200px 0px"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsTableHeaderSortDescending" extends="joinGameScreenListHeaderSortDescending">
+        <Value name="position" value="200px 0px"/>
+    </Profile>
+	
+	<Profile name="uiBaNeMenuFieldsTable" extends="emptyPanel" with="anchorTopLeft">
+        <Value name="listItemWidth" value="1400px"/>
+        <Value name="hasFrame" value="false"/>
+        <Value name="updateChildrenOverlayState" value="false"/>
+        <Value name="markRows" value="false"/>
+        <Value name="periodicUpdate" value="false"/>
+        <Value name="handleFocus" value="false"/>
+        <Value name="size" value="1400px 652px"/>
+        <Value name="lateInitialization" value="true"/>
+        <Value name="itemsPerCol" value="16"/>
+        <Value name="maxNumItems" value="16"/>
+        <Value name="listItemHeight" value="40.75px"/>
+        <Value name="rowBackgroundProfile" value="uiBaNeMenuFieldsRowBackground"/>
+        <Value name="rowBackgroundProfileAlternate" value="uiBaNeMenuFieldsRowBackgroundAlternate"/>
+
+        <Variant name="mobile">
+            <Value name="position" value="1px -101px"/>
+            <Value name="itemsPerCol" value="6"/>
+            <Value name="maxNumItems" value="6"/>
+            <Value name="listItemHeight" value="90px"/>
+            <Value name="listItemWidth" value="1768px"/>
+            <Value name="supportsMouseScrolling" value="false" />
+            <Value name="isPaginated" value="true"/>
+            <Value name="focusScrollsList" value="false" />
+            <Value name="keepSelectedInView" value="true" />
+            <Value name="handleFocus" value="true"/>
+            <Value name="size" value="1768px 540px"/>
+            <Value name="markRows" value="true"/>
+            <Value name="updateChildrenOverlayState" value="true"/>
+        </Variant>
+    </Profile>
+	    <Profile name="uiBaNeMenuFieldsRow" extends="emptyPanel" with="anchorBottomLeft">
+        <Value name="size" value="1400px 40.77px"/>
+        <Value name="handleFocus" value="false"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowBackground" extends="uiBaNeMenuFieldsRow">
+        <Value name="imageColor" value="$preset_colorListRowBackground"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowBackgroundAlternate" extends="uiBaNeMenuFieldsRowBackground" with="alternateRow" />
+	
+	<Profile name="uiBaNeMenuFieldsRowFieldsCell" extends="wideButton">
+        <Value name="fitToContent" value="false"/>
+        <Value name="handleFocus" value="false"/>
+        <Value name="size" value="250px 40.75px"/>
+        <Value name="textMaxWidth" value="230px"/>
+        <Value name="textColor" value="$preset_colorWhite"/>
+		<Value name="textVerticalAlignment" value="middle"/>
+		<Value name="textAlignment" value="left"/>
+        <Value name="textSize" value="18px"/>
+        <Value name="textBold" value="true"/>
+        <Value name="textOffset" value="25px 0px"/>
+
+        <Value name="iconSize" value="0"/>
+
+        <Variant name="mobile">
+            <Value name="size" value="768px 90px"/>
+            <Value name="textMaxWidth" value="740px"/>
+            <Value name="textSize" value="33px"/>
+            <Value name="textUpperCase" value="false"/>
+        </Variant>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowFieldsCellActive" extends="uiBaNeMenuFieldsRowFieldsCell">
+        <Value name="imageColor" value="0.3140 0.8069 1.0000 0.3"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowAttributeCell" extends="wideButton">
+        <Value name="size" value="230px 40.75px"/>
+        <Value name="handleFocus" value="false"/>
+        <Value name="fitToContent" value="false"/>
+
+        <Value name="textSize" value="18px"/>
+        <Value name="textBold" value="false"/>
+        <Value name="textAlignment" value="left"/>
+        <Value name="textVerticalAlignment" value="middle"/>
+        <Value name="textColor" value="$preset_colorWhite"/>
+        <Value name="textMaxWidth" value="210px"/>
+        <Value name="textUpperCase" value="false" />
+		<Value name="textOffset" value="10px 0px"/>
+
+        <Value name="iconSize" value="0"/>		
+        <Value name="iconUVs" value="960px 96px 48px 48px"/>
+        <Value name="iconTextOffset" value="0"/>
+
+        <Value name="iconColor" value="$preset_colorTransparent"/>
+        <Value name="iconFocusedColor" value="$preset_colorTransparent"/>
+        <Value name="iconHighlightedColor" value="$preset_colorTransparent"/>
+        <Value name="iconSelectedColor" value="$preset_colorTransparent"/>
+
+        <Variant name="mobile">
+            <Value name="size" value="333px 90px"/>
+            <Value name="textSize" value="33px"/>
+            <Value name="textMaxWidth" value="300px"/>
+        </Variant>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowAttributeCellNegative" extends="uiBaNeMenuFieldsRowAttributeCell">
+        <Value name="textColor" value="$preset_colorRed"/>
+
+        <Value name="iconSize" value="32px 32px"/>
+        <Value name="iconTextOffset" value="-6px -2px"/>
+
+        <Value name="iconColor" value="$preset_colorRed"/>
+        <Value name="iconFocusedColor" value="$preset_colorRed"/>
+        <Value name="iconHighlightedColor" value="$preset_colorRed"/>
+        <Value name="iconSelectedColor" value="$preset_colorRed"/>
+    </Profile>
+
+    <Profile name="uiBaNeMenuFieldsRowAttributeCellActive" extends="uiBaNeMenuFieldsRowAttributeCell">
+        <Value name="imageColor" value="0.3140 0.8069 1.0000 0.3"/>
+    </Profile>
+    <Profile name="uiBaNeMenuFieldsRowAttributeCellActiveNegative" extends="uiBaNeMenuFieldsRowAttributeCellActive">
+        <Value name="imageColor" value="0.3140 0.8069 1.0000 0.3"/>
+    </Profile>
+	
+	
+</GUIProfiles>

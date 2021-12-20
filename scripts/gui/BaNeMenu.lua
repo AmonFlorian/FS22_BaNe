@@ -57,7 +57,7 @@ end
 
 function BaNeMenu:InitSettings(settings)
 	self.settings = settings
-	self.pageBaNeMain:InitSettings(self.settings.general)
+	self.pageBaNeMain:InitSettings(self.settings.general, self.settings.fields)
 	self.pageBaNeHelper:InitSettings(self.settings.helper)
 	self.pageBaNeFieldPrices:InitSettings(self.settings.fields)
 	self.pageBaNeShopPrices:InitSettings(self.settings.shops)

@@ -1,11 +1,13 @@
 -- Business administration & national economy (for FS22)
 -- helper changes file: BaNe_fields.lua
--- v1.1.5b
+-- v1.2.5b
 --
 -- @author [kwa:m]
--- @date 17.12.2021
+-- @date 20.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.2.5b - close to add leasing of fields (GUI good to go)
+-- v1.2.0b - completly rewritten save- und load-functions for settings (dynamic, better structured, better to go with fields then ... hard work, gosh)
 -- v1.1.5b - base UI has option besides buying farmland to lease the farmland (to be implemented) - price is per field ha not like buyprice for farmland ha
 -- v1.1.0b - added first iteration of field pricing
 -- v1.0.1b - added jobType branch in helper factors
@@ -48,6 +50,7 @@ function BaNe:inject_fields()
 	--print(#g_currentMission.inGameMenu.pageMapOverview.buttonBuyFarmland)
 	--print(#g_currentMission.inGameMenu.pageMapOverview.buttonLeaseFarmland)
 	--DebugUtil.printTableRecursively(g_currentMission.inGameMenu.pageMapOverview ,"_",0,2)
+
 end
 
 function BaNe:LeaseCallback(selectedFarmland, balance)
@@ -70,7 +73,7 @@ function BaNe:LeaseCallback(selectedFarmland, balance)
 			title = g_i18n:getText("uiBaNe_leaseFarmland_title"),			
 			text = string.format(g_i18n:getText("uiBaNe_textLeaseOption"),g_i18n:formatMoney(priceperyr, 0, true, true)),
 			options = leaseOptions,
-			callback = function(item) g_BaNe:optionDialogCallback(item, selectedFarmland, priceperyr) end
+			callback = function(item) g_BaNe:optionDialogCallback(item, selectedFarmland, priceperyr, fieldInfo) end
 		})
 		
 	else
@@ -80,10 +83,106 @@ function BaNe:LeaseCallback(selectedFarmland, balance)
 	end
 end
 
-function BaNe:optionDialogCallback(selectedRuntime, selectedFarmland, priceperyr)
+function BaNe:optionDialogCallback(selectedRuntime, selectedFarmland, priceperyr, selectedField)
 	if selectedRuntime > 0 then
 		if g_BaNe.debug then
-			print("ooo BaNe:LeaseCallback wants to lease farmland with id '"..tostring(selectedFarmland.id).."' for €"..tostring(priceperyr).." over "..tostring(selectedRuntime).." year(s) ooo")
+			print("ooo BaNe:LeaseCallback adding lease for farmland with id '"..tostring(selectedFarmland.id).."' for €"..tostring(priceperyr).." over "..tostring(selectedRuntime).." year(s) and fieldID '"..tostring(selectedField.fieldId).."' ooo")
 		end
+		self:addFieldLeasing(selectedFarmland.id, true, selectedRuntime, selectedField.fieldId, priceperyr, selectedField.fieldArea)
+	end
+end
+
+function BaNe:convertDateString(str)
+--[[	WINTER = 3,
+		SUMMER = 1,
+		SPRING = 0,
+		AUTUMN = 2	]]---
+	local SEASON_TRANSLATION = {
+	["0"] = "uiBaNe_SPRING",
+	["1"] = "uiBaNe_SUMMER",
+	["2"] = "uiBaNe_AUTUMN",
+	["3"] = "uiBaNe_WINTER"
+	}
+	local yr, season, day, dpp = str:match("(%d%d%d)(%d)(%d%d%d%d%d%d)(%d%d)") 
+	if tonumber(yr) ~= nil and SEASON_TRANSLATION[season] ~= nil and tonumber(day) ~= nil and tonumber(dpp) ~= nil then
+		return tonumber(yr), SEASON_TRANSLATION[season], tonumber(day), tonumber(dpp)
+	end
+	return nil
+end
+
+function BaNe:getBaNeDate(future, runTime, fromDay)
+--[[	WINTER = 3,
+		SUMMER = 1,
+		SPRING = 0,
+		AUTUMN = 2	]]---
+		local env = g_currentMission.environment
+		local retString = nil
+	if future == nil then
+		local currentYear = env.currentYear
+		local currentDay = env.currentDay
+		local currentDaysPerPeriod = env.daysPerPeriod
+		local currentSeason = math.fmod(math.floor((currentDay) / (currentDaysPerPeriod * 3)), Environment.SEASONS_IN_YEAR)
+		retString = string.format("%03d%d%06d%02d",currentYear,currentSeason,currentDay,currentDaysPerPeriod)
+	elseif future then
+		if fromDay == nil then
+			fromDay = env.currentDay
+		end
+		if tonumber(runTime) == nil or tonumber(runTime) < 1 then
+			runTime = 1
+		end
+		local futureDaysPerPeriod = env.daysPerPeriod
+		local futureDay = fromDay + (futureDaysPerPeriod * 3 * Environment.SEASONS_IN_YEAR) * runTime
+		local futureYear = math.floor(futureDay / (futureDaysPerPeriod * Environment.PERIODS_IN_YEAR)) + 1
+		local futureSeason = math.fmod(math.floor((futureDay) / (futureDaysPerPeriod * 3)), Environment.SEASONS_IN_YEAR)
+		retString = string.format("%03d%d%06d%02d",futureYear,futureSeason,futureDay,futureDaysPerPeriod)		
+	end
+	
+	return retString
+end
+
+function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, fieldID, pricePerYear, fieldArea, canCancel)
+	local newField = nil
+	if farmlandID ~= nil then
+		newField = {}
+		if fieldID == nil or pricePerYear == nil or fieldArea == nil then
+			local field = g_fieldManager.farmlandIdFieldMapping[farmlandID][1]
+			if fieldID == nil then
+				fieldID = field.fieldId
+			end
+			if fieldArea == nil then
+				fieldArea = field.fieldArea
+			end
+			if pricePerYear == nil then
+				pricePerYear = g_farmlandManager:getPricePerHa() * fieldArea * g_farmlandManager.farmlands[farmlandID]["priceFactor"]
+				pricePerYear = math.round(pricePerYear * g_BaNe.settings.fields.leaseFactor,1)
+			end
+		end
+		if isLeased == nil then
+			isLeased = false
+		end
+		newField["fieldID"] = tonumber(fieldID)
+		newField["farmlandID"] = tonumber(farmlandID)
+		newField["isLeased"] = isLeased
+		newField["fieldArea"] = math.round(fieldArea,0.01)
+		newField["pricePerYear"] = tonumber(pricePerYear)
+		newField["startDate"] = self:getBaNeDate()
+		newField["endDate"] = self:getBaNeDate(true, runTime)
+		newField["canCancel"] = true
+	end
+	if newField ~= nil and table.length(newField) == 8 then
+		if g_BaNe.settings.fields.leasing ~= nil and (g_BaNe.settings.fields.leasing[newField.farmlandID] == nil or g_BaNe.settings.fields.leasing[newField.farmlandID][isLeased]) then
+			g_BaNe.settings.fields.leasing[newField.farmlandID] = newField
+			if g_BaNe.debug then
+				print("ooo BaNe:LeaseCallback added field to settings! ooo")
+				DebugUtil.printTableRecursively(g_BaNe.settings.fields.leasing[newField.farmlandID],"_",0,1)
+			end
+		else	
+			if g_BaNe.debug then
+				print("ooo BaNe:LeaseCallback couldn't add field to settings! already exists! ooo")
+			end
+		end
+	elseif (newField == nil or #newField ~= 8) and g_BaNe.debug then
+		print("ooo BaNe:LeaseCallback couldn't add field to settings! #newField="..tostring(table.length(newField)).." with table: ooo")
+		DebugUtil.printTableRecursively(newField,"_",0,1)
 	end
 end

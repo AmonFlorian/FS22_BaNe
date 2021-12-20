@@ -1,11 +1,12 @@
 -- Business administration & national economy (for FS22)
 -- main faile: BaNe_main.lua
-local version = "1.2.0b"
+local version = "1.2.5b"
 --
 -- @author [kwa:m]
--- @date 18.12.2021
+-- @date 20.12.2021
 --
 -- Copyright (c) [kwa:m]
+-- v1.2.5b - close to add leasing of fields (GUI good to go)
 -- v1.2.0b - completly rewritten save- und load-functions for settings (dynamic, better structured, better to go with fields then ... hard work, gosh)
 -- v1.1.5b - base UI has option besides buying farmland to lease the farmland (to be implemented) - price is per field ha not like buyprice for farmland ha
 -- v1.1.0b - added first iteration of field pricing
@@ -69,7 +70,7 @@ function BaNe.new(i18n)
 	self={}
 	setmetatable(self, BaNe_mt)
 	self.version = version
-	self.debug = false
+	self.debug = true
 	self.mdir = modDir
 	self.mname = modName
 	-- Initialize standard values
@@ -78,6 +79,7 @@ function BaNe.new(i18n)
 	self.settings["general"] = {}
 	self.settings["helper"] = {}
 	self.settings["fields"] = {}
+	self.settings.fields["leasing"] = {}
 	self.settings["shops"] = {}
 	self.i18n = i18n
 	
@@ -137,6 +139,7 @@ function BaNe:LoadMissionDone(mission)
 	-- okay...this is a somewhat tricky part (shoutouts to the VCA guys for that clever idea to l10n those textes by adding an id-key, god damn)
 	
 	if g_client ~= nil then --g_currentMission:getIsClient()
+		g_gui:loadProfiles(Utils.getFilename("guiProfiles.xml", self.mdir))
 
 		local function loadTextElement( self, xmlFile, key )		
 			local id = getXMLString(xmlFile, key .. "#baneTextID")
@@ -490,6 +493,7 @@ function BaNe:setDefaults()
 	-- fields
 	--
 	fields.leaseFactor = 0.015 -- 1.5%
+	fields.leasing = {}
 	
 	local shops = {}		
 	settings.general = general

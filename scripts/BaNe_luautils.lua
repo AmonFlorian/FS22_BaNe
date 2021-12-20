@@ -61,6 +61,12 @@ function arrayMerge(array1, array2)
     end
 end
 
+function table.length(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
+
 function validateTimeString(str, pat)
 	if str ~= nil then
 		if str:len() >= 4 and str:len() <= 5 then

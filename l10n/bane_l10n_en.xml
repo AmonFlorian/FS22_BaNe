@@ -16,7 +16,18 @@
 		<text name="uiBaNe_savedSettings" text="Settings saved"/>
 
         <!-- Main XML -->
-        <text name="uiBaNe_mainHeader" text="BaNe - General"/>
+        <text name="uiBaNe_fieldsHeader" text="BaNe - Leased Fields"/>
+		<text name="uiBaNe_cancelLease" text="Cancel lease"/>
+		<text name="uiBaNe_SPRING" text="Spring"/>
+		<text name="uiBaNe_SUMMER" text="Summer"/>
+		<text name="uiBaNe_AUTUMN" text="Autumn"/>
+		<text name="uiBaNe_WINTER" text="Winter"/>
+		<text name="uiBaNe_header_fieldid" text="Leased Field"/>
+		<text name="uiBaNe_header_fieldArea" text="Field Area in ha"/>
+		<text name="uiBaNe_header_leasePrice" text="Price Per Year"/>
+		<text name="uiBaNe_header_leaseStart" text="Start of Lease"/>
+		<text name="uiBaNe_header_leaseEnd" text="End of Lease"/>
+		<text name="uiBaNe_header_cancelLease" text="Cancellable?"/>		
 
         <!-- Helper XML -->
 		<text name="uiBaNe_helperHeader" text="BaNe - Wage Settings"/>
@@ -54,13 +65,17 @@
 		<text name="uiBaNe_tt_helperFactBfrom" text="Set multiplier applies from this starting time. (!FORMAT: HH:MM!)"/>
 		<text name="uiBaNe_helperFactBto" text="Ending time"/>
 		<text name="uiBaNe_tt_helperFactBto" text="Set multiplier applies until this ending time. (!FORMAT: HH:MM!)"/>
+		
         <!-- FieldPrices XML -->
         <text name="uiBaNe_fieldPricesHeader" text="BaNe - Field Prices"/>
 		<text name="uiBaNe_buttonLeaseFarmland" text="LEASE"/>
 		<text name="uiBaNe_leaseFarmland_title" text="Lease Farmland"/>
 		<text name="uiBaNe_textLeaseOption" text="Please choose the runtime of the lease for %s per year."/>
+		<text name="uiBaNe_leaseDay" text="Day"/>
 		<text name="uiBaNe_leaseYear" text="Year"/>
-		<text name="uiBaNe_leaseYears" text="Years"/>
+		<text name="uiBaNe_leaseYears" text="Years"/>		
+		<text name="uiBaNe_cancelLeaseAllowed" text="Cancellation allowed"/>
+		<text name="uiBaNe_cancelLeaseDenied" text="Cancellation denied"/>
 
         <!-- ShopPrices XML -->
         <text name="uiBaNe_shopPricesHeader" text="BaNe - Shop Prices"/>  
