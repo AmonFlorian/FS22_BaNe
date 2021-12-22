@@ -16,6 +16,7 @@ TODOs:
 - populate the other areas with factors for different buying prices (within reason)
 - maybe overthink existing features
 - maybe add the option to let different values fluctuate over time
+- add multiplayer support
 
 Features:
 - tabbed InGame menu (accessible with L_SHIFT+O)
