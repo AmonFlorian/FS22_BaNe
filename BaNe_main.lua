@@ -41,9 +41,14 @@ BaNe.SETTINGS_SCHEMA["Int"] = {
 		"from_hours",
 		"to_hours",
 		"from_minutes",
-		"to_minutes"
+		"to_minutes",
+		"farmlandID",
+		"fieldID",
+		"payPeriods"
 	}
-BaNe.SETTINGS_SCHEMA["String"] = {	
+BaNe.SETTINGS_SCHEMA["String"] = {
+		"startDate",
+		"endDate"
 	}
 
 function BaNe:hasType(vType, vName)
@@ -51,6 +56,8 @@ function BaNe:hasType(vType, vName)
 	if vType ~= nil then
 		if BaNe.SETTINGS_SCHEMA[vType] ~= nil then
 			for _, v in pairs(BaNe.SETTINGS_SCHEMA[vType]) do
+				if vName == "endDate" or vName == "startDate" then
+				end
 				if tostring(v) == tostring(vName) then
 					ret = true
 				end
@@ -82,6 +89,8 @@ function BaNe.new(i18n)
 	self.settings.fields["leasing"] = {}
 	self.settings["shops"] = {}
 	self.i18n = i18n
+	self.isMasterUser = nil
+	self.isServer = nil
 	
 	return self
 end
@@ -93,7 +102,7 @@ function BaNe:loadMap()
 	end
 	
 	-- Save current settings on gamesave
-	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, self.saveSet)
+	FSBaseMission.saveSavegame = Utils.appendedFunction(FSBaseMission.saveSavegame, self.saveSetSaveGame)
 	
 	--load Savegame
 	local sgIndex = g_currentMission.missionInfo.savegameIndex
@@ -120,7 +129,7 @@ function BaNe:loadMap()
 	end;
 	if g_BaNe.debug then
 		print("ooo g_BaNe settings after load ---> ooo")
-		DebugUtil.printTableRecursively(g_BaNe.settings ,"_",0,4)
+		DebugUtil.printTableRecursively(g_BaNe.settings ,"_",0,5)
 	end
 end;
 
@@ -134,9 +143,14 @@ local function DoneLoadMission(mission, node)
 end 
 
 function BaNe:LoadMissionDone(mission)	
-	-- initialize GUI
-	
+	-- initialize environment
+	self.isServer = g_currentMission:getIsServer() 
+	self.isMasterUser = g_currentMission.isMasterUser
 	-- okay...this is a somewhat tricky part (shoutouts to the VCA guys for that clever idea to l10n those textes by adding an id-key, god damn)
+	if g_BaNe.debug then
+		print("ooo BaNe:LoadMissionDone - isServer = "..tostring(self.isServer).." & isMasterUser = "..tostring(self.isServer).." ooo")
+	end
+	
 	
 	if g_client ~= nil then --g_currentMission:getIsClient()
 		g_gui:loadProfiles(Utils.getFilename("guiProfiles.xml", self.mdir))
@@ -196,7 +210,7 @@ function BaNe:loadSet()
 		sgFolderPath = ('%ssavegame%d'):format(getUserProfileAppPath(), sgIndex)
 	end
 	self.setXMLfile = nil
-	self.setXMLfile = loadXMLFile("bTEMP", sgFolderPath .. "/newBaNe.xml")
+	self.setXMLfile = loadXMLFile("bTEMP", sgFolderPath .. "/BaNe.xml")
 	local subs = BaNe.SETTINGS_SCHEMA
 	if self.setXMLfile ~= nil then
 		local loadedSettings = {}
@@ -237,15 +251,25 @@ function BaNe:loadSetRec(nodePath, parent)
 			end			
 		elseif dataType ~= nil and idName ~= nil then
 			local readFunction = BaNe.ELEMENT_READ_FUNCTIONS[dataType]
-			if dataType == "XMLFloat" then
-				setArray[typeName][idName] = readFunction(self.setXMLfile, xmlNodePath.."#value", 0.001)
+			if readFunction ~= nil then
+				if dataType == "XMLFloat" then
+					setArray[typeName][idName] = readFunction(self.setXMLfile, xmlNodePath.."#value", 0.001)
+				else
+					setArray[typeName][idName] = readFunction(self.setXMLfile, xmlNodePath.."#value")
+				end
 			else
-				setArray[typeName][idName] = readFunction(self.setXMLfile, xmlNodePath.."#value")
+				if g_BaNe.debug then
+					print("ooo BaNe:loadSetRec no readFunction for dataType='"..tostring(dataType).."' found ooo")
+				end
 			end
 		end
 		i = i + 1		
 	end
 	return setArray
+end
+
+function BaNe:saveSetSaveGame()
+	BaNe:saveSet(g_BaNe.settings)
 end
 
 function BaNe:saveSet(settings)
@@ -260,7 +284,7 @@ function BaNe:saveSet(settings)
 	
 	local main = "BaNe"
 	self.setXMLfile = nil
-	self.setXMLfile = createXMLFile("BaNe", sgFolderPath .. "/newBaNe.xml", main)
+	self.setXMLfile = createXMLFile("BaNe", sgFolderPath .. "/BaNe.xml", main)
 	-- version
 	setXMLString(self.setXMLfile, main.."#version", g_BaNe.version)
 	local i = 0	
@@ -269,38 +293,38 @@ function BaNe:saveSet(settings)
 			local xmlNodePath = main..".SetElement("..i..")"
 			if type(v) == "table" then				
 				setXMLString(self.setXMLfile, xmlNodePath.."#type", "settings")
-				setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
-				self:saveSetRec(xmlNodePath, v, k)
+				setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
+				self:saveSetRec(xmlNodePath, v, tostring(k))
 			else
 				if type(v) == "number" then
 					setXMLString(self.setXMLfile, xmlNodePath.."#type", "settings")
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
-					if self:hasType("Int",k) then
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
+					if self:hasType("Int",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLInt")
 						setXMLInt(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("Float",k) then
+					elseif self:hasType("Float",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLFloat")
 						setXMLFloat(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("Bool",k) then
+					elseif self:hasType("Bool",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLBool")
 						setXMLBool(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("String",k) then
+					elseif self:hasType("String",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLString")
-						setXMLString(self.setXMLfile, xmlNodePath.."#value", v)
+						setXMLString(self.setXMLfile, xmlNodePath.."#value", tostring(v))
 					else
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLFloat")
 						setXMLFloat(self.setXMLfile, xmlNodePath.."#value", v)
 					end
 				elseif type(v) == "boolean" then
 					setXMLString(self.setXMLfile, xmlNodePath.."#type", "settings")
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
 					setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLBool")
 					setXMLBool(self.setXMLfile, xmlNodePath.."#value", v)
 				elseif type(v) == "string" then
 					setXMLString(self.setXMLfile, xmlNodePath.."#type", "settings")
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
 					setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLString")
-					setXMLString(self.setXMLfile, xmlNodePath.."#value", v)
+					setXMLString(self.setXMLfile, xmlNodePath.."#value", tostring(v))
 				end
 			end
 			i = i + 1
@@ -317,39 +341,39 @@ function BaNe:saveSetRec(nodePath, settings, parent)
 		for k, v in pairs(setArray[parent]) do
 			local xmlNodePath = nodePath..".SetElement("..i..")"
 			if type(v) == "table" then
-				setXMLString(self.setXMLfile, xmlNodePath.."#type", parent)
-				setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
-				self:saveSetRec(xmlNodePath, v, k)
+				setXMLString(self.setXMLfile, xmlNodePath.."#type", tostring(parent))
+				setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
+				self:saveSetRec(xmlNodePath, v, tostring(k))
 			else
 				if type(v) == "number" then
-					setXMLString(self.setXMLfile, xmlNodePath.."#type", parent)
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
-					if self:hasType("Int",k) then
+					setXMLString(self.setXMLfile, xmlNodePath.."#type", tostring(parent))
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
+					if self:hasType("Int",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLInt")
 						setXMLInt(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("Float",k) then
+					elseif self:hasType("Float",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLFloat")
 						setXMLFloat(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("Bool",k) then
+					elseif self:hasType("Bool",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLBool")
 						setXMLBool(self.setXMLfile, xmlNodePath.."#value", v)
-					elseif self:hasType("String",k) then
+					elseif self:hasType("String",tostring(k)) then
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLString")
-						setXMLString(self.setXMLfile, xmlNodePath.."#value", v)
+						setXMLString(self.setXMLfile, xmlNodePath.."#value", tostring(v))
 					else
 						setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLFloat")
 						setXMLFloat(self.setXMLfile, xmlNodePath.."#value", v)
 					end
 				elseif type(v) == "boolean" then
-					setXMLString(self.setXMLfile, xmlNodePath.."#type", parent)
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
+					setXMLString(self.setXMLfile, xmlNodePath.."#type", tostring(parent))
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
 					setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLBool")
 					setXMLBool(self.setXMLfile, xmlNodePath.."#value", v)
 				elseif type(v) == "string" then
-					setXMLString(self.setXMLfile, xmlNodePath.."#type", parent)
-					setXMLString(self.setXMLfile, xmlNodePath.."#id", k)
-					setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLFloat")
-					setXMLString(self.setXMLfile, xmlNodePath.."#value", parent)			
+					setXMLString(self.setXMLfile, xmlNodePath.."#type", tostring(parent))
+					setXMLString(self.setXMLfile, xmlNodePath.."#id", tostring(k))
+					setXMLString(self.setXMLfile, xmlNodePath.."#data","XMLString")
+					setXMLString(self.setXMLfile, xmlNodePath.."#value", tostring(v))			
 				end
 			end
 			i = i + 1
@@ -411,52 +435,6 @@ end
 function BaNe:removeActionEventsPlayer()
 	self.eventId = {}
 end
-
-function BaNe:saveSettings()
-	local sgIndex = g_currentMission.missionInfo.savegameIndex
-	local sgFolderPath = g_currentMission.missionInfo.savegameDirectory
-	if sgFolderPath == nil then
-		sgFolderPath = ('%ssavegame%d'):format(getUserProfileAppPath(), sgIndex)
-	end
-	
-	local key = "BaNe"
-	local xmlFile = createXMLFile("BaNe", sgFolderPath .. "/BaNe.xml", key)
-	
-	-- version
-	setXMLString(xmlFile, key.."#version", g_BaNe.version)
-
-	--
-	-- helper
-	--	
-	-- wagePerHour
-	setXMLInt(xmlFile, key.."#helper_wageType", g_BaNe.settings.helper.wageType)
-	setXMLFloat(xmlFile, key.."#helper_wageAbsolute", g_BaNe.settings.helper.wageAbsolute)
-	setXMLFloat(xmlFile, key.."#helper_wagePercentile", g_BaNe.settings.helper.wagePercentile)
-	setXMLFloat(xmlFile, key.."#helper_conveyorPercent", g_BaNe.settings.helper.conveyorPercent)
-	setXMLFloat(xmlFile, key.."#helper_fieldworkPercent", g_BaNe.settings.helper.fieldworkPercent)
-	-- nighttime factors
-	setXMLBool(xmlFile, key.."#helper_enableFactor_A", g_BaNe.settings.helper.factorA["enable"])
-	setXMLFloat(xmlFile, key.."#helper_nightFactor_A", g_BaNe.settings.helper.factorA["factor"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_A_fth", g_BaNe.settings.helper.factorA["from_hours"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_A_ftm", g_BaNe.settings.helper.factorA["from_minutes"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_A_tth", g_BaNe.settings.helper.factorA["to_hours"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_A_ttm", g_BaNe.settings.helper.factorA["to_minutes"])
-	setXMLBool(xmlFile, key.."#helper_enableFactor_B", g_BaNe.settings.helper.factorB["enable"])
-	setXMLFloat(xmlFile, key.."#helper_nightFactor_B", g_BaNe.settings.helper.factorB["factor"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_B_fth", g_BaNe.settings.helper.factorB["from_hours"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ftm", g_BaNe.settings.helper.factorB["from_minutes"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_B_tth", g_BaNe.settings.helper.factorB["to_hours"])
-	setXMLInt(xmlFile, key.."#helper_nightFactor_B_ttm", g_BaNe.settings.helper.factorB["to_minutes"])
-	--
-	-- fields
-	--
-	-- leaseFactor
-	setXMLFloat(xmlFile, key.."#fields_leaseFactor", g_BaNe.settings.fields.leaseFactor)
-	
-	saveXMLFile(xmlFile)
-	delete(xmlFile)
-	print "ooo BaNe settings saved! ooo"
-end;
 
 function BaNe:setDefaults()
 	local settings = {}

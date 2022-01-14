@@ -46,10 +46,6 @@ function BaNe:inject_fields()
 	end
 	g_currentMission.inGameMenu.pageMapOverview.showContextInput = Utils.appendedFunction(g_currentMission.inGameMenu.pageMapOverview.showContextInput, bLFvisible)
 	g_currentMission.inGameMenu.pageMapOverview.registerInput = Utils.appendedFunction(g_currentMission.inGameMenu.pageMapOverview.registerInput, bLFregIn)
-	--g_currentMission.inGameMenu.pageMapOverview["buttonLeaseFarmland"] = buttonLeaseFarmland
-	--print(#g_currentMission.inGameMenu.pageMapOverview.buttonBuyFarmland)
-	--print(#g_currentMission.inGameMenu.pageMapOverview.buttonLeaseFarmland)
-	--DebugUtil.printTableRecursively(g_currentMission.inGameMenu.pageMapOverview ,"_",0,2)
 
 end
 
@@ -83,12 +79,51 @@ function BaNe:LeaseCallback(selectedFarmland, balance)
 	end
 end
 
-function BaNe:optionDialogCallback(selectedRuntime, selectedFarmland, priceperyr, selectedField)
-	if selectedRuntime > 0 then
+function BaNe:optionDialogCallback(selectedRuntime, selectedFarmland, pricePerYr, selectedField)
+	if selectedRuntime ~= nil and selectedFarmland ~= nil and pricePerYr ~= nil and selectedField ~= nil then
+		local payOptions = {}
+		local yearPeriods = Environment.PERIODS_IN_YEAR
+		local monthlyPrice = math.floor(pricePerYr / yearPeriods)
+		local quarterlyPrice = math.floor(pricePerYr / 4)
+		local biannualPrice = math.floor(pricePerYr / 2)
+		local annualPrice = math.floor(pricePerYr)
+		table.insert(payOptions,g_i18n:getText("uiBaNe_payMonthly").." ("..g_i18n:formatMoney(monthlyPrice, 0, true, true)..")")
+		table.insert(payOptions,g_i18n:getText("uiBaNe_payQuarterly").." ("..g_i18n:formatMoney(quarterlyPrice, 0, true, true)..")")
+		table.insert(payOptions,g_i18n:getText("uiBaNe_payBiannual").." ("..g_i18n:formatMoney(biannualPrice, 0, true, true)..")")
+		table.insert(payOptions,g_i18n:getText("uiBaNe_payAnnual").." ("..g_i18n:formatMoney(annualPrice, 0, true, true)..")")
+		
+		g_gui:showOptionDialog({
+			title = g_i18n:getText("uiBaNe_leaseFarmland_title"),			
+			text = g_i18n:getText("uiBaNe_textLeaseOption2"),
+			options = payOptions,
+			callback = function(item) g_BaNe:optionDialogCallback2(item, selectedRuntime, selectedFarmland, pricePerYr, selectedField) end
+		})
+	else
 		if g_BaNe.debug then
-			print("ooo BaNe:LeaseCallback adding lease for farmland with id '"..tostring(selectedFarmland.id).."' for €"..tostring(priceperyr).." over "..tostring(selectedRuntime).." year(s) and fieldID '"..tostring(selectedField.fieldId).."' ooo")
+			print("ooo BaNe:optionDialogCallback has missing arguments! ooo")
 		end
-		self:addFieldLeasing(selectedFarmland.id, true, selectedRuntime, selectedField.fieldId, priceperyr, selectedField.fieldArea)
+		return true
+	end
+end
+
+function BaNe:optionDialogCallback2(item, selectedRuntime, selectedFarmland, pricePerYr, selectedField)
+	if item > 0 then
+		local yearPeriods = Environment.PERIODS_IN_YEAR
+		local selectedPayPeriods = 12
+		if item == 1 then
+			selectedPayPeriods = 1
+		elseif item == 2 then
+			selectedPayPeriods = yearPeriods / 4
+		elseif item == 3 then
+			selectedPayPeriods = yearPeriods / 2
+		elseif item == 4 then
+			selectedPayPeriods = yearPeriods
+		end
+		
+		if g_BaNe.debug then
+			print("ooo BaNe:LeaseCallback2 adding lease for farmland with id '"..tostring(selectedFarmland.id).."' for €"..tostring(pricePerYr).." over "..tostring(selectedRuntime).." year(s) and fieldID '"..tostring(selectedField.fieldId).."' with payPeriods='"..tostring(selectedPayPeriods).."' ooo")
+		end
+		self:addFieldLeasing(selectedFarmland.id, true, selectedRuntime, selectedPayPeriods, selectedField.fieldId, pricePerYr, selectedField.fieldArea)
 	end
 end
 
@@ -103,14 +138,15 @@ function BaNe:convertDateString(str)
 	["2"] = "uiBaNe_AUTUMN",
 	["3"] = "uiBaNe_WINTER"
 	}
-	local yr, season, day, dpp = str:match("(%d%d%d)(%d)(%d%d%d%d%d%d)(%d%d)") 
-	if tonumber(yr) ~= nil and SEASON_TRANSLATION[season] ~= nil and tonumber(day) ~= nil and tonumber(dpp) ~= nil then
-		return tonumber(yr), SEASON_TRANSLATION[season], tonumber(day), tonumber(dpp)
+	local yr,period,day,dip,dpp,season = str:match("(%x%x)(%x)(%x%x%x%x)(%d%d)(%d%d)(%d)")  
+
+	if tonumber(yr,16) ~= nil and tonumber(period,16) and tonumber(day,16) ~= nil and tonumber(dip) ~= nil and tonumber(dpp) ~= nil and SEASON_TRANSLATION[season] ~= nil then
+		return tonumber(yr,16), tonumber(period,16), tonumber(day,16), tonumber(dip), tonumber(dpp), SEASON_TRANSLATION[season]
 	end
 	return nil
 end
 
-function BaNe:getBaNeDate(future, runTime, fromDay)
+function BaNe:getBaNeDate(future, runTime, fromDay, runtimeInDays)
 --[[	WINTER = 3,
 		SUMMER = 1,
 		SPRING = 0,
@@ -121,8 +157,10 @@ function BaNe:getBaNeDate(future, runTime, fromDay)
 		local currentYear = env.currentYear
 		local currentDay = env.currentDay
 		local currentDaysPerPeriod = env.daysPerPeriod
+		local currentPeriod = math.ceil(((currentDay % - 1) % (currentDaysPerPeriod * Environment.PERIODS_IN_YEAR) + 1) / currentDaysPerPeriod)
 		local currentSeason = math.fmod(math.floor((currentDay) / (currentDaysPerPeriod * 3)), Environment.SEASONS_IN_YEAR)
-		retString = string.format("%03d%d%06d%02d",currentYear,currentSeason,currentDay,currentDaysPerPeriod)
+		local currentDayInPeriod = (currentDay - 1) % currentDaysPerPeriod + 1
+		retString = string.format("%02x%x%04x%02d%02d%d",currentYear,currentPeriod,currentDay,currentDayInPeriod,currentDaysPerPeriod,currentSeason)
 	elseif future then
 		if fromDay == nil then
 			fromDay = env.currentDay
@@ -131,20 +169,42 @@ function BaNe:getBaNeDate(future, runTime, fromDay)
 			runTime = 1
 		end
 		local futureDaysPerPeriod = env.daysPerPeriod
-		local futureDay = fromDay + (futureDaysPerPeriod * 3 * Environment.SEASONS_IN_YEAR) * runTime
+		local futureDay = nil
+		if runtimeInDays == nil or runtimeInDays == "false" then			
+			futureDay = fromDay + (futureDaysPerPeriod * 3 * Environment.SEASONS_IN_YEAR) * runTime
+		elseif runtimeInDays then
+			futureDay = fromDay + runTime
+		end
+		local futureDayInPeriod = (futureDay -1) % futureDaysPerPeriod + 1
+		local futurePeriod = math.ceil(((futureDay - 1) % (futureDaysPerPeriod * Environment.PERIODS_IN_YEAR) + 1) / futureDaysPerPeriod)
 		local futureYear = math.floor(futureDay / (futureDaysPerPeriod * Environment.PERIODS_IN_YEAR)) + 1
 		local futureSeason = math.fmod(math.floor((futureDay) / (futureDaysPerPeriod * 3)), Environment.SEASONS_IN_YEAR)
-		retString = string.format("%03d%d%06d%02d",futureYear,futureSeason,futureDay,futureDaysPerPeriod)		
+		retString = string.format("%02x%x%04x%02d%02d%d",futureYear,futurePeriod,futureDay,futureDayInPeriod,futureDaysPerPeriod,futureSeason)		
 	end
 	
 	return retString
 end
 
-function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, fieldID, pricePerYear, fieldArea, canCancel)
+function BaNe:daysToPayment(startDate, payPeriods)
+	local env = g_currentMission.environment
+	daysPerPeriod = env.daysPerPeriod
+	currentDay = env.currentDay
+	local factor = 1.0
+	local _, _, startDay, _, _, _ = self:convertDateString(startDate)
+	local daysSinceStart = currentDay - startDay
+	local daysSinceLastPayment = (currentDay % (daysPerPeriod * payPeriods)) - 1
+	--local daysToNextPayment = 
+	if daysSinceStart < daysSinceLastPayment then
+		factor = math.round(((daysPeriod * payPeriods)-((startDay % (daysPerPeriod * payPeriods)) - 1))/(daysPeriod * payPeriods),0.01)
+	end
+	return daysToNextPayment, factor
+end
+
+function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, payPeriods, fieldID, pricePerYear, fieldArea, canCancel)
 	local newField = nil
 	if farmlandID ~= nil then
 		newField = {}
-		if fieldID == nil or pricePerYear == nil or fieldArea == nil then
+		if fieldID == nil or pricePerYear == nil or fieldArea == nil or payPeriods == nil then
 			local field = g_fieldManager.farmlandIdFieldMapping[farmlandID][1]
 			if fieldID == nil then
 				fieldID = field.fieldId
@@ -156,6 +216,9 @@ function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, fieldID, pricePerYe
 				pricePerYear = g_farmlandManager:getPricePerHa() * fieldArea * g_farmlandManager.farmlands[farmlandID]["priceFactor"]
 				pricePerYear = math.round(pricePerYear * g_BaNe.settings.fields.leaseFactor,1)
 			end
+			if payPeriods == nil then
+				payPeriods = 12
+			end
 		end
 		if isLeased == nil then
 			isLeased = false
@@ -163,13 +226,14 @@ function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, fieldID, pricePerYe
 		newField["fieldID"] = tonumber(fieldID)
 		newField["farmlandID"] = tonumber(farmlandID)
 		newField["isLeased"] = isLeased
+		newField["payPeriods"] = payPeriods
 		newField["fieldArea"] = math.round(fieldArea,0.01)
 		newField["pricePerYear"] = tonumber(pricePerYear)
 		newField["startDate"] = self:getBaNeDate()
 		newField["endDate"] = self:getBaNeDate(true, runTime)
 		newField["canCancel"] = true
 	end
-	if newField ~= nil and table.length(newField) == 8 then
+	if newField ~= nil and table.length(newField) == 9 then
 		if g_BaNe.settings.fields.leasing ~= nil and (g_BaNe.settings.fields.leasing[newField.farmlandID] == nil or g_BaNe.settings.fields.leasing[newField.farmlandID][isLeased]) then
 			g_BaNe.settings.fields.leasing[newField.farmlandID] = newField
 			if g_BaNe.debug then
@@ -184,5 +248,11 @@ function BaNe:addFieldLeasing(farmlandID, isLeased, runTime, fieldID, pricePerYe
 	elseif (newField == nil or #newField ~= 8) and g_BaNe.debug then
 		print("ooo BaNe:LeaseCallback couldn't add field to settings! #newField="..tostring(table.length(newField)).." with table: ooo")
 		DebugUtil.printTableRecursively(newField,"_",0,1)
+	end
+end
+
+function BaNe:removeFieldLeasing(fieldID)
+	if fieldID ~= nil then
+		g_BaNe.settings.fields.leasing[tostring(fieldID)] = nil
 	end
 end

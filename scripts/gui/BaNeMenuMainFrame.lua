@@ -40,6 +40,7 @@ function BaNeMenuMainFrame.new()
 	self.maxDisplayFields = 0
 	self.dataBindings = {}
 	self.needTableInit = true
+	self.hasCustomMenuButtons = true
 	return self
 end
 
@@ -58,20 +59,19 @@ end
 
 function BaNeMenuMainFrame:initialize(l10n)
 	self.l10n = l10n
-	for _, tableHeader in pairs(self.tableHeaderBox.elements) do
-		tableHeader.focusChangeOverride = self:makeTableHeaderFocusOverrideFunction(tableHeader)
-	end
+--	for _, tableHeader in pairs(self.tableHeaderBox.elements) do
+--		tableHeader.focusChangeOverride = self:makeTableHeaderFocusOverrideFunction(tableHeader)
+--	end
 	
-	if GS_IS_MOBILE_VERSION then
-		self.sellButton = {
-			profile = "buttonSell",
-			inputAction = InputAction.MENU_CANCEL,
-			text = self.l10n:getText("uiBaNe_cancelLease"),
-			callback = function ()
-				self:onButtonCancelLease()
-			end
-		}
-	end
+
+	self.cancelButton = {
+		profile = "buttonCancel",
+		inputAction = InputAction.MENU_EXTRA_2,
+		text = self.l10n:getText("uiBaNe_button_cancelLease"),
+		callback = function ()
+			self:onButtonCancelLease()
+		end
+	}
 end
 
 function BaNeMenuMainFrame:onGuiSetupFinished()
@@ -89,6 +89,7 @@ function BaNeMenuMainFrame:onFrameOpen()
 		self.needTableInit = false
 	end
 	self.tableHeaderBox:invalidateLayout()
+	
 	self:updateFields()
 	self:setSoundSuppressed(true)
 	
@@ -114,9 +115,8 @@ function BaNeMenuMainFrame:updateLeasedLands()
 			self:setNumberOfPages(math.ceil(#self.fieldList / BaNeMenuMainFrame.MAX_NUM_FIELDS))
 		end
 		self.leasedFieldsTable:clearData()
-
-		for _, field in ipairs(self.fieldList) do
-			local dataRow = self:buildDataRow(field)
+		for id, field in ipairs(self.fieldList) do
+			local dataRow = self:buildDataRow(id,field)
 			self.leasedFieldsTable:addRow(dataRow)
 			
 		end
@@ -185,25 +185,13 @@ function BaNeMenuMainFrame:makeTableHeaderFocusOverrideFunction(headerElement)
 	end
 end
 
-function BaNeMenuMainFrame:updateMenuButtons()
-	self.menuButtonInfo = {
-		{
-			inputAction = InputAction.MENU_BACK
-		}
-	}
 
-	if GS_IS_MOBILE_VERSION and #self.fieldList > 0 then
-		table.insert(self.menuButtonInfo, self.sellButton)
-	end
-
-	self:setMenuButtonInfoDirty()
-end
 
 BaNeMenuMainFrame.DATA_BINDING = {
 	FIELD_ID = "leasedFieldID",
 	SIZE = "fieldSize",
 	LEASE_PRICE = "leasePrice",
-	START_DATE = "startDate",
+	PAY_PERIODS = "payPeriods",
 	END_DATE = "endDate",
 	CANCEL = "leaseCancel",
 }
@@ -220,8 +208,8 @@ function BaNeMenuMainFrame:onDataBindLeasePrice(element)
 	self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.LEASE_PRICE] = element.name
 end
 
-function BaNeMenuMainFrame:onDataBindStartDate(element)
-	self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.START_DATE] = element.name
+function BaNeMenuMainFrame:onDataBindPayPeriods(element)
+	self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.PAY_PERIODS] = element.name
 end
 
 function BaNeMenuMainFrame:onDataBindEndDate(element)
@@ -278,22 +266,29 @@ function BaNeMenuMainFrame:setLeasePriceData(dataCell, field)
 	dataCell.overrideProfileName = self:getActiveProfile(profile, field)
 end
 
-function BaNeMenuMainFrame:setStartDateData(dataCell, field)
+function BaNeMenuMainFrame:setPayPeriodsData(dataCell, field)
 	local profile = BaNeMenuMainFrame.PROFILE.ATTRIBUTE_CELL_NEUTRAL
-	local year,season,day,dpp = g_BaNe:convertDateString(field.startDate)
-	local dayInPeriod = g_currentMission.environment:getDayInPeriodFromDay(day)
-	local dateText = string.format("%s %d %s %s %d",self.l10n:getText("uiBaNe_leaseYear"),year,self.l10n:getText(season),self.l10n:getText("uiBaNe_leaseDay"),dayInPeriod)
+	local payPeriods = field.payPeriods
+	local payText = "uiBaNe_payMonthly"
+	if payPeriods == 1 then
+		payText = "uiBaNe_payMonthly"
+	elseif payPeriods == 3 then
+		payText = "uiBaNe_payQuarterly"
+	elseif payPeriods == 6 then
+		payText = "uiBaNe_payBiannual"
+	elseif payPeriods == 12 then
+		payText = "uiBaNe_payAnnual"
+	end
 
-	dataCell.value = day
-	dataCell.text = dateText
+	dataCell.value = payPeriods
+	dataCell.text = g_i18n:getText(payText)
 	dataCell.overrideProfileName = self:getActiveProfile(profile, field)
 end
 
 function BaNeMenuMainFrame:setEndDateData(dataCell, field)
 	local profile = BaNeMenuMainFrame.PROFILE.ATTRIBUTE_CELL_NEUTRAL
-	local year,season,day,dpp = g_BaNe:convertDateString(field.endDate)
-	local dayInPeriod = g_currentMission.environment:getDayInPeriodFromDay(day)
-	local dateText = string.format("%s %d %s %s %d",self.l10n:getText("uiBaNe_leaseYear"),year,self.l10n:getText(season),self.l10n:getText("uiBaNe_leaseDay"),dayInPeriod)
+	local year,period,day,dayInPeriod = g_BaNe:convertDateString(field.endDate)
+	local dateText = string.format("%s %d %s %s %d",self.l10n:getText("uiBaNe_leaseYear"),year,self.l10n:formatPeriod(period, true),self.l10n:getText("uiBaNe_leaseDay"),dayInPeriod)
 
 	dataCell.value = day
 	dataCell.text = dateText
@@ -321,19 +316,19 @@ function BaNeMenuMainFrame:setCancelData(dataCell, field)
 	dataCell.overrideProfileName = self:getActiveProfile(profile, field)
 end
 
-function BaNeMenuMainFrame:buildDataRow(field)
-	local dataRow = TableElement.DataRow.new(field.id, self.dataBindings)
+function BaNeMenuMainFrame:buildDataRow(id,field)
+	local dataRow = TableElement.DataRow.new(id, self.dataBindings)
 	local fieldCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.FIELD_ID]]
 	local sizeCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.SIZE]]
 	local priceCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.LEASE_PRICE]]
-	local startCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.START_DATE]]
+	local periodCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.PAY_PERIODS]]
 	local endCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.END_DATE]]
 	local cancelCell = dataRow.columnCells[self.dataBindings[BaNeMenuMainFrame.DATA_BINDING.CANCEL]]
 
 	self:setNameData(fieldCell, field)
 	self:setSizeData(sizeCell, field)
 	self:setLeasePriceData(priceCell, field)
-	self:setStartDateData(startCell, field)
+	self:setPayPeriodsData(periodCell, field)
 	self:setEndDateData(endCell, field)
 	self:setCancelData(cancelCell, field)
 
@@ -349,6 +344,7 @@ function BaNeMenuMainFrame:onClickFieldHeader(element)
 	self.leasedFieldsTable:setCustomSortFunction(BaNeMenuMainFrame.sortAttributes, true)
 	self.leasedFieldsTable:onClickHeader(element)
 	self.leasedFieldsTable:updateView(true)
+	FocusManager:setFocus(self.tableHeaderBox)
 end
 
 function BaNeMenuMainFrame:onClickAttributeHeader(element)
@@ -356,6 +352,7 @@ function BaNeMenuMainFrame:onClickAttributeHeader(element)
 	self.leasedFieldsTable:setCustomSortFunction(BaNeMenuMainFrame.sortAttributes, true)
 	self.leasedFieldsTable:onClickHeader(element)
 	self.leasedFieldsTable:updateView(true)
+	FocusManager:setFocus(self.tableHeaderBox)
 end
 
 function BaNeMenuMainFrame:onPageChanged(page, fromPage)
@@ -367,15 +364,16 @@ function BaNeMenuMainFrame:onPageChanged(page, fromPage)
 end
 
 function BaNeMenuMainFrame:onButtonCancelLease()
-	local field = self.fieldList[self.leasedFieldsTable.selectedIndex]
+	local fieldIndex = self.fieldList[self.leasedFieldsTable.selectedIndex]
 
-	if field ~= nil then
-		print ("need to do stuff here to 'sell' and to delete dis one")
+	if fieldIndex ~= nil then
+		print ("ooo need to do stuff here to 'sell' and to delete index:"..tostring(fieldIndex).." ooo")
 	end
 end
 
-function BaNeMenuMainFrame:onSelectionChanged()
+function BaNeMenuMainFrame:onSelectionChanged()	
 	if self.leasedFieldsTable ~= nil then
+		self.leasedFieldsTable:updateRowSelection()
 		self:updateMenuButtons()
 	end
 end
@@ -386,6 +384,26 @@ end
 
 function BaNeMenuMainFrame:onFieldBuyEvent()
 	self:updateFields()
+end
+
+
+function BaNeMenuMainFrame:updateMenuButtons()
+	
+	self.menuButtonInfo = {
+		{
+			inputAction = InputAction.MENU_BACK
+		}
+	}
+	if self.leasedFieldsTable.selectedId ~= nil and self.fieldList ~= nil then
+		local selectedField = self.fieldList[self.leasedFieldsTable.selectedId]
+		if selectedField ~= nil then		
+			if #self.fieldList > 0 and selectedField.canCancel then
+				table.insert(self.menuButtonInfo, self.cancelButton)
+			end
+		end
+	end
+
+	self:setMenuButtonInfoDirty()
 end
 
 BaNeMenuMainFrame.PROFILE = {

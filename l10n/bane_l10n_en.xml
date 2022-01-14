@@ -17,7 +17,7 @@
 
         <!-- Main XML -->
         <text name="uiBaNe_fieldsHeader" text="BaNe - Leased Fields"/>
-		<text name="uiBaNe_cancelLease" text="Cancel lease"/>
+		<text name="uiBaNe_button_cancelLease" text="Cancel lease"/>
 		<text name="uiBaNe_SPRING" text="Spring"/>
 		<text name="uiBaNe_SUMMER" text="Summer"/>
 		<text name="uiBaNe_AUTUMN" text="Autumn"/>
@@ -25,7 +25,7 @@
 		<text name="uiBaNe_header_fieldid" text="Leased Field"/>
 		<text name="uiBaNe_header_fieldArea" text="Field Area in ha"/>
 		<text name="uiBaNe_header_leasePrice" text="Price Per Year"/>
-		<text name="uiBaNe_header_leaseStart" text="Start of Lease"/>
+		<text name="uiBaNe_header_payPeriods" text="Pay-Period"/>
 		<text name="uiBaNe_header_leaseEnd" text="End of Lease"/>
 		<text name="uiBaNe_header_cancelLease" text="Cancellable?"/>		
 
@@ -71,9 +71,14 @@
 		<text name="uiBaNe_buttonLeaseFarmland" text="LEASE"/>
 		<text name="uiBaNe_leaseFarmland_title" text="Lease Farmland"/>
 		<text name="uiBaNe_textLeaseOption" text="Please choose the runtime of the lease for %s per year."/>
+		<text name="uiBaNe_textLeaseOption2" text="Please choose your desired pay-period."/>
 		<text name="uiBaNe_leaseDay" text="Day"/>
 		<text name="uiBaNe_leaseYear" text="Year"/>
-		<text name="uiBaNe_leaseYears" text="Years"/>		
+		<text name="uiBaNe_leaseYears" text="Years"/>	
+		<text name="uiBaNe_payMonthly" text="Monthly"/>
+		<text name="uiBaNe_payQuarterly" text="Quarterly"/>
+		<text name="uiBaNe_payBiannual" text="Biannual"/>
+		<text name="uiBaNe_payAnnual" text="Annual"/>		
 		<text name="uiBaNe_cancelLeaseAllowed" text="Cancellation allowed"/>
 		<text name="uiBaNe_cancelLeaseDenied" text="Cancellation denied"/>
 

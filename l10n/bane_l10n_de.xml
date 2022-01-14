@@ -17,7 +17,7 @@
 
         <!-- Main XML -->
         <text name="uiBaNe_fieldsHeader" text="BaNe - Gepachtete Felder"/>
-		<text name="uiBaNe_cancelLease" text="Pacht kündigen"/>
+		<text name="uiBaNe_button_cancelLease" text="Pacht kündigen"/>
 		<text name="uiBaNe_SPRING" text="Frühling"/>
 		<text name="uiBaNe_SUMMER" text="Sommer"/>
 		<text name="uiBaNe_AUTUMN" text="Herbst"/>
@@ -25,7 +25,7 @@
 		<text name="uiBaNe_header_fieldid" text="Gepachtetes Feld"/>
 		<text name="uiBaNe_header_fieldArea" text="Feldfläche in ha"/>
 		<text name="uiBaNe_header_leasePrice" text="Preis pro Jahr"/>
-		<text name="uiBaNe_header_leaseStart" text="Pacht-Beginn"/>
+		<text name="uiBaNe_header_payPeriods" text="Zahlweise"/>
 		<text name="uiBaNe_header_leaseEnd" text="Pacht-Ende"/>
 		<text name="uiBaNe_header_cancelLease" text="Kündbar?"/>
 
@@ -71,9 +71,14 @@
 		<text name="uiBaNe_buttonLeaseFarmland" text="PACHTEN"/>
 		<text name="uiBaNe_leaseFarmland_title" text="Farmland pachten"/>
 		<text name="uiBaNe_textLeaseOption" text="Bitte wähle die Laufzeit der Pacht über %s pro Jahr."/>
+		<text name="uiBaNe_textLeaseOption2" text="Bitte wähle die Zahlweise der Pacht."/>
 		<text name="uiBaNe_leaseDay" text="Tag"/>
 		<text name="uiBaNe_leaseYear" text="Jahr"/>
 		<text name="uiBaNe_leaseYears" text="Jahre"/>
+		<text name="uiBaNe_payMonthly" text="Monatlich"/>
+		<text name="uiBaNe_payQuarterly" text="Vierteljährlich"/>
+		<text name="uiBaNe_payBiannual" text="Halbjährlich"/>
+		<text name="uiBaNe_payAnnual" text="Jährlich"/>
 		<text name="uiBaNe_cancelLeaseAllowed" text="Kündigung möglich"/>
 		<text name="uiBaNe_cancelLeaseDenied" text="Kündigung verwehrt"/>
 

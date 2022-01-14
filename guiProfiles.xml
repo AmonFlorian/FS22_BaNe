@@ -188,7 +188,7 @@
         <!-- <Value name="iconUVs" value="96px 816px 96px 96px"/> -->
 		<Value name="iconSize" value="0"/>
     </Profile>
-    <Profile name="uiBaNeMenuFieldsTableHeaderLeaseStart" extends="uiBaNeMenuFieldsTableHeader">
+    <Profile name="uiBaNeMenuFieldsTableHeaderPayPeriods" extends="uiBaNeMenuFieldsTableHeader">
         <!-- <Value name="iconUVs" value="384px 816px 96px 96px"/> -->
 		<Value name="iconSize" value="0"/>
     </Profile>
@@ -211,14 +211,15 @@
         <Value name="listItemWidth" value="1400px"/>
         <Value name="hasFrame" value="false"/>
         <Value name="updateChildrenOverlayState" value="false"/>
-        <Value name="markRows" value="false"/>
+        <Value name="markRows" value="true"/>
         <Value name="periodicUpdate" value="false"/>
-        <Value name="handleFocus" value="false"/>
+        <Value name="handleFocus" value="true"/>
         <Value name="size" value="1400px 652px"/>
         <Value name="lateInitialization" value="true"/>
         <Value name="itemsPerCol" value="16"/>
         <Value name="maxNumItems" value="16"/>
         <Value name="listItemHeight" value="40.75px"/>
+		<Value name="selectedWithoutFocus" value="false"/>
         <Value name="rowBackgroundProfile" value="uiBaNeMenuFieldsRowBackground"/>
         <Value name="rowBackgroundProfileAlternate" value="uiBaNeMenuFieldsRowBackgroundAlternate"/>
 
@@ -241,9 +242,12 @@
 	    <Profile name="uiBaNeMenuFieldsRow" extends="emptyPanel" with="anchorBottomLeft">
         <Value name="size" value="1400px 40.77px"/>
         <Value name="handleFocus" value="false"/>
+		<Value name="selectedWithoutFocus" value="false"/>
     </Profile>
     <Profile name="uiBaNeMenuFieldsRowBackground" extends="uiBaNeMenuFieldsRow">
         <Value name="imageColor" value="$preset_colorListRowBackground"/>
+		<Value name="imageFocusedColor" value="$preset_colorFocusBackgroundGradient"/>
+        <Value name="imageSelectedColor" value="$preset_colorFocusBackgroundGradient"/>
     </Profile>
     <Profile name="uiBaNeMenuFieldsRowBackgroundAlternate" extends="uiBaNeMenuFieldsRowBackground" with="alternateRow" />
 	
